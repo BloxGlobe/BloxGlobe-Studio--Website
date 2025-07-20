@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Froststrap</title>
+  <link rel="icon" type="image/png" href="./Froststrap Logo.png" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: sans-serif;
+    }
+
+    body {
+      background-color: #101822;
+      color: white;
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+      position: relative;
+      min-height: 100vh;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 1rem 3rem; /* space at bottom for snow layer */
+    }
+
+    a {
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    #snowflake-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .container {
+      max-width: 1400px;
+      width: 100%;
+      margin: auto;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .header-section {
+      width: 100%;
+      max-width: 1000px;
+      margin: 3rem auto 3rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 3rem;
+    }
+
+    .header-main {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      flex-shrink: 0;
+    }
+
+    .logo-title {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .header-image {
+      max-width: 160px;
+      height: auto;
+    }
+
+    .title-subtitle-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .title-gradient {
+      font-size: 4.5rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, #0bbafb, #4285ec);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0;
+      line-height: 1;
+    }
+
+    .fork-subtitle {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: #66a9d9;
+      user-select: none;
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: flex-start;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+      background: linear-gradient(to right, #0bbafb, #4285ec);
+      color: white;
+      border: none;
+      min-width: 180px;
+      text-align: center;
+    }
+
+    .btn:hover {
+      box-shadow: 0 0 8px 2px #0bbafb99;
+      transform: scale(1.05);
+      opacity: 0.95;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #0bbafb;
+      border: 2px solid #0bbafb;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(11, 186, 251, 0.2);
+      box-shadow: 0 0 8px 2px #0bbafb99;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    /* Make badges links, add hover like btn-secondary */
+    .badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border: 2px solid #0bbafb;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #0bbafb;
+      background: rgba(11, 186, 251, 0.1);
+      user-select: none;
+      white-space: nowrap;
+      min-width: 160px;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+      text-decoration: none;
+    }
+
+    .badge:hover {
+      background: rgba(11, 186, 251, 0.2);
+      box-shadow: 0 0 8px 2px #0bbafb99;
+      transform: scale(1.05);
+      opacity: 0.95;
+      text-decoration: none;
+    }
+
+    .features-section {
+      width: 100%;
+      max-width: 1000px;
+      margin-top: 3rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background-color: #1c2431;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(11, 186, 251, 0.1);
+      text-align: left;
+      transition: 0.2s ease all;
+    }
+
+    .feature-card:hover {
+      box-shadow: 0 0 12px rgba(11, 186, 251, 0.3);
+    }
+
+    .feature-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #0bbafb;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-desc {
+      font-size: 1rem;
+      color: #c7d4e2;
+    }
+
+    footer {
+      margin-top: 4rem;
+      text-align: center;
+      opacity: 0.6;
+      font-size: 0.9rem;
+      user-select: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* subtle flat snow layer at bottom, thinner and more natural */
+    #snow-layer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100vw;
+      height: 6px;
+      background: white;
+      opacity: 0.12;
+      z-index: 0;
+      pointer-events: none;
+      box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.2);
+      /* soft glow effect */
+    }
+
+    .snowflake {
+      position: absolute;
+      color: white;
+      font-size: 1em;
+      opacity: 0.8;
+      pointer-events: none;
+      /* Use combined transform for both fall and rotate in one animation */
+      animation-name: fall-rotate;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      top: -30px;
+    }
+
+    @keyframes fall-rotate {
+      0% {
+        transform: translateY(-100px) rotate(0deg);
+      }
+
+      100% {
+        transform: translateY(110vh) rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="snowflake-container"></div>
+
+  <div class="container">
+    <section class="header-section">
+      <div class="header-main">
+        <div class="logo-title">
+          <img src="./Froststrap Logo.png" alt="Froststrap Logo" class="header-image" />
+          <div class="title-subtitle-wrapper">
+            <h1 class="title-gradient">Froststrap</h1>
+            <p class="fork-subtitle">A Bloxstrap/Fishstrap Fork</p>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <a id="download-button" class="btn" href="https://github.com/RealMeddsam/Froststrap/releases/latest" target="_blank" rel="noopener noreferrer">
+            Download Latest (loading...)
+          </a>
+          <a href="https://github.com/RealMeddsam/Froststrap" target="_blank" class="btn btn-secondary" rel="noopener noreferrer">
+            Star on GitHub
+          </a>
+        </div>
+
+        <div class="badge-row" aria-label="Repository stats">
+          <a href="https://github.com/RealMeddsam/Froststrap/blob/main/LICENSE" target="_blank" class="badge" id="badge-license" rel="noopener noreferrer" aria-label="View License">
+            License: <span>...</span>
+          </a>
+          <a href="https://github.com/RealMeddsam/Froststrap/releases/latest" target="_blank" class="badge" id="badge-latest-downloads" rel="noopener noreferrer" aria-label="View Latest Downloads">
+            Latest Downloads: <span>...</span>
+          </a>
+          <a href="https://github.com/RealMeddsam/Froststrap" target="_blank" class="badge" id="badge-total-downloads" rel="noopener noreferrer" aria-label="View Total Downloads">
+            Total Downloads: <span>...</span>
+          </a>
+        </div>
+      </div>
+
+      <div style="flex-grow: 1;"></div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+      <div class="feature-card">
+        <div class="feature-title">Custom Bootstrapper</div>
+        <div class="feature-desc">Launch Roblox with fully customized settings, flags, tweaks and mods tailored to your
+          needs</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-title">Clean List</div>
+        <div class="feature-desc">Removes fake/invalid flags, default flags and updates outdated flags automatically with
+          an option to revert the changes</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-title">Find Flags</div>
+        <div class="feature-desc">Look through every fastflag inside of roblox and find hidden/unknown flags</div>
+      </div>
+    </section>
+
+    <footer>
+      &copy; 2025 Froststrap. Built by Meddsam.
+    </footer>
+  </div>
+
+  <!-- subtle flat snow layer at bottom -->
+  <div id="snow-layer"></div>
+
+  <script>
+    const snowCount = 40;
+    const snowContainer = document.getElementById('snowflake-container');
+
+    for (let i = 0; i < snowCount; i++) {
+      const snowflake = document.createElement('div');
+      snowflake.classList.add('snowflake');
+      snowflake.style.left = Math.random() * 100 + 'vw';
+      snowflake.style.fontSize = (Math.random() * 8 + 8) + 'px';
+
+      // Random animation duration between 5s and 10s
+      const duration = (Math.random() * 5 + 5).toFixed(2);
+      snowflake.style.animationDuration = `${duration}s`;
+
+      // Random animation delay so flakes don't all start at the same time
+      snowflake.style.animationDelay = `${(Math.random() * 10).toFixed(2)}s`;
+      snowflake.textContent = '❄';
+      snowContainer.appendChild(snowflake);
+    }
+
+    const repoOwner = 'RealMeddsam';
+    const repoName = 'Froststrap';
+
+    const downloadButton = document.getElementById('download-button');
+    const badgeLatest = document.getElementById('badge-latest-downloads').querySelector('span');
+    const badgeTotal = document.getElementById('badge-total-downloads').querySelector('span');
+    const badgeLicense = document.getElementById('badge-license').querySelector('span');
+
+    fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/releases/latest`)
+      .then(res => res.json())
+      .then(data => {
+        const version = data.tag_name || 'latest';
+        downloadButton.textContent = `Download Latest (${version})`;
+
+        let latestDownloadCount = 0;
+        if (data.assets && data.assets.length) {
+          latestDownloadCount = data.assets.reduce((acc, asset) => acc + (asset.download_count || 0), 0);
+        }
+        badgeLatest.textContent = latestDownloadCount.toLocaleString();
+      }).catch(() => {
+        downloadButton.textContent = 'Download Latest (unknown)';
+        badgeLatest.textContent = 'unknown';
+      });
+
+    fetch(`https://api.github.com/repos/${repoOwner}/${repoName}`)
+      .then(res => res.json())
+      .then(data => {
+        badgeLicense.textContent = data.license?.spdx_id || 'Unknown';
+        return fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/releases`);
+      })
+      .then(res => res.json())
+      .then(releases => {
+        let totalDownloads = 0;
+        releases.forEach(release => {
+          if (release.assets && release.assets.length) {
+            totalDownloads += release.assets.reduce((acc, asset) => acc + (asset.download_count || 0), 0);
+          }
+        });
+        badgeTotal.textContent = totalDownloads.toLocaleString();
+      })
+      .catch(() => {
+        badgeLicense.textContent = 'Unknown';
+        badgeTotal.textContent = 'unknown';
+      });
+  </script>
+</body>
+
+</html>
