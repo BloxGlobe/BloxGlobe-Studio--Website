@@ -6,12 +6,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Froststrap</title>
   <link rel="icon" type="image/png" href="./Froststrap Logo.png" />
+
+  <meta name="description" content="Froststrap - A customizable Roblox bootstrapper. Fork of Bloxstrap/Fishstrap." />
+  <meta property="og:title" content="Froststrap" />
+  <meta property="og:description" content="Custom Roblox bootstrapper with flags, mods, and clean flag lists." />
+  <meta property="og:image" content="./Froststrap Logo.png" />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0bbafb" />
+
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: sans-serif;
+      font-family: "Inter", sans-serif;
     }
 
     body {
@@ -24,7 +32,7 @@
       min-height: 100vh;
       flex-direction: column;
       align-items: center;
-      padding: 0 1rem 3rem; /* space at bottom for snow layer */
+      padding: 0 1rem 3rem;
     }
 
     a {
@@ -57,10 +65,11 @@
     .header-section {
       width: 100%;
       max-width: 1000px;
-      margin: 3rem auto 3rem;
+      margin: 2rem auto;
       display: flex;
       justify-content: space-between;
-      gap: 3rem;
+      gap: 1.5rem;
+      padding-bottom: 1.25rem;
     }
 
     .header-main {
@@ -89,13 +98,12 @@
     }
 
     .title-gradient {
-      font-size: 4.5rem;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
       font-weight: 900;
       background: linear-gradient(90deg, #0bbafb, #4285ec);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin: 0;
-      line-height: 1;
+      line-height: 1.1;
     }
 
     .fork-subtitle {
@@ -105,7 +113,7 @@
       user-select: none;
     }
 
-    .button-row {
+.button-row {
       display: flex;
       justify-content: flex-start;
       gap: 1rem;
@@ -153,7 +161,6 @@
       margin-top: 1rem;
     }
 
-    /* Make badges links, add hover like btn-secondary */
     .badge {
       display: flex;
       align-items: center;
@@ -170,7 +177,7 @@
       min-width: 160px;
       justify-content: center;
       cursor: pointer;
-      transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+      transition: 0.3s;
       text-decoration: none;
     }
 
@@ -178,46 +185,185 @@
       background: rgba(11, 186, 251, 0.2);
       box-shadow: 0 0 8px 2px #0bbafb99;
       transform: scale(1.05);
-      opacity: 0.95;
-      text-decoration: none;
+    }
+
+    .section-divider {
+      width: 100%;
+      max-width: 1000px;
+      height: 1px;
+      margin: 1.25rem auto;
+      background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(11,186,251,0.12), rgba(255,255,255,0.02));
+      box-shadow: 0 0 10px rgba(11,186,251,0.03);
+      border-radius: 1px;
     }
 
     .features-section {
       width: 100%;
       max-width: 1000px;
-      margin-top: 3rem;
+      margin-top: 1.25rem;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
+      gap: 1.25rem;
     }
 
-    .feature-card {
+    .feature-wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+
+    details.feature-page, details.faq-item {
       background-color: #1c2431;
-      padding: 1.5rem;
+      padding: 1rem 1.25rem;
       border-radius: 12px;
-      box-shadow: 0 0 20px rgba(11, 186, 251, 0.1);
-      text-align: left;
-      transition: 0.2s ease all;
+      box-shadow: 0 0 14px rgba(11,186,251,0.06);
+      cursor: pointer;
+      overflow: hidden;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
     }
 
-    .feature-card:hover {
-      box-shadow: 0 0 12px rgba(11, 186, 251, 0.3);
+    details.feature-page[open], details.faq-item[open] {
+      box-shadow: 0 0 22px rgba(11,186,251,0.12);
+      transform: translateY(-3px);
     }
 
-    .feature-title {
-      font-size: 1.3rem;
-      font-weight: bold;
-      color: #0bbafb;
+    .section-divider {
+      width: 100%;
+      max-width: 1000px;
+      height: 1px;
+      margin: 1.25rem auto;
+      background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(11,186,251,0.12), rgba(255,255,255,0.02));
+      box-shadow: 0 0 10px rgba(11,186,251,0.03);
+      border-radius: 1px;
+    }
+
+    .features-section {
+      width: 100%;
+      max-width: 1000px;
+      margin-top: 1.25rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .feature-wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+
+    details.feature-page,
+    details.faq-item {
+      background-color: #1c2431;
+      padding: 1rem 1.25rem;
+      border-radius: 12px;
+      box-shadow: 0 0 14px rgba(11,186,251,0.06);
+      cursor: pointer;
+      overflow: hidden;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    details.feature-page[open],
+    details.faq-item[open] {
+      box-shadow: 0 0 22px rgba(11,186,251,0.12);
+      transform: translateY(-3px);
+    }
+
+    details.feature-page summary,
+    details.faq-item summary {
+      list-style: none;
+      outline: none;
       margin-bottom: 0.5rem;
+      padding-bottom: 0.35rem;
+      border-bottom: none;
+      background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0.02),
+        rgba(11,186,251,0.12),
+        rgba(255,255,255,0.02)
+      );
+      background-size: 0 1px;
+      background-repeat: no-repeat;
+      background-position: bottom left;
+      transition: background-size 0.35s ease, transform 0.2s ease;
     }
 
-    .feature-desc {
-      font-size: 1rem;
+    details.feature-page[open] summary,
+    details.faq-item[open] summary {
+      background-size: 100% 1px;
+    }
+    .feature-list,
+    .faq-body {
+      height: 0;
+      opacity: 0;
+      overflow: hidden;
+      margin-top: 0.75rem;
       color: #c7d4e2;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      border: none;
+      background: none;
+      transition: height 0.35s ease, opacity 0.35s ease;
+    }
+
+    details.feature-page summary {
+      font-weight: 800;
+      color: #0bbafb;
+      font-size: 1.1rem;
+    }
+
+    details.faq-item summary {
+      font-weight: 700;
+      color: #0bbafb;
+      font-size: 1rem;
+    }
+
+    details.feature-page summary::-webkit-details-marker,
+    details.faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .feature-list ul,
+    .faq-body ul {
+      padding-left: 0;
+      margin: 0.75rem 0 0 0;
+      list-style: none;
+    }
+
+    .feature-list li,
+    .faq-body li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin: 0.4rem 0;
+    }
+
+    .feature-list li::before,
+    .faq-body li::before {
+      content: "•";
+      color: #ffffff;
+      font-size: 0.9rem;
+      line-height: 1;
+      flex-shrink: 0;
+      position: relative;
+      top: 0.2em;
+      margin-right: 0.5rem;
+    }
+
+    .faq-section {
+      width: 1000px;
+      margin-top: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .faq-section .feature-wrapper {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
     footer {
-      margin-top: 4rem;
+      margin-top: 2.5rem;
       text-align: center;
       opacity: 0.6;
       font-size: 0.9rem;
@@ -226,7 +372,6 @@
       z-index: 1;
     }
 
-    /* subtle flat snow layer at bottom, thinner and more natural */
     #snow-layer {
       position: fixed;
       bottom: 0;
@@ -238,7 +383,6 @@
       z-index: 0;
       pointer-events: none;
       box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.2);
-      /* soft glow effect */
     }
 
     .snowflake {
@@ -247,7 +391,6 @@
       font-size: 1em;
       opacity: 0.8;
       pointer-events: none;
-      /* Use combined transform for both fall and rotate in one animation */
       animation-name: fall-rotate;
       animation-timing-function: linear;
       animation-iteration-count: infinite;
@@ -256,11 +399,36 @@
 
     @keyframes fall-rotate {
       0% {
-        transform: translateY(-100px) rotate(0deg);
+        transform: translate3d(0, -100px, 0) rotate(0deg);
       }
 
       100% {
-        transform: translateY(110vh) rotate(360deg);
+        transform: translate3d(0, 110vh, 0) rotate(360deg);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .header-section {
+        padding-bottom: 1rem;
+        gap: 0.75rem;
+      }
+
+      .button-row {
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .badge {
+        min-width: 120px;
+      }
+    }
+
+      .button-row {
+        gap: 0.5rem;
+      }
+
+      .badge {
+        min-width: 120px;
       }
     }
   </style>
@@ -273,7 +441,7 @@
     <section class="header-section">
       <div class="header-main">
         <div class="logo-title">
-          <img src="./Froststrap Logo.png" alt="Froststrap Logo" class="header-image" />
+          <img src="./Froststrap Logo.png" alt="Froststrap Logo" class="header-image" loading="lazy" />
           <div class="title-subtitle-wrapper">
             <h1 class="title-gradient">Froststrap</h1>
             <p class="fork-subtitle">A Bloxstrap/Fishstrap Fork</p>
@@ -281,46 +449,185 @@
         </div>
 
         <div class="button-row">
-          <a id="download-button" class="btn" href="https://github.com/RealMeddsam/Froststrap/releases/latest" target="_blank" rel="noopener noreferrer">
+          <a id="download-button" class="btn" href="https://github.com/RealMeddsam/Froststrap/releases/latest"
+            target="_blank" rel="noopener noreferrer" aria-label="Download Froststrap latest release">
             Download Latest (loading...)
           </a>
-          <a href="https://github.com/RealMeddsam/Froststrap" target="_blank" class="btn btn-secondary" rel="noopener noreferrer">
+          <a href="https://github.com/RealMeddsam/Froststrap" target="_blank" class="btn btn-secondary"
+            rel="noopener noreferrer" id="star-button" aria-label="Star Froststrap on GitHub">
             Star on GitHub
           </a>
         </div>
 
         <div class="badge-row" aria-label="Repository stats">
-          <a href="https://github.com/RealMeddsam/Froststrap/blob/main/LICENSE" target="_blank" class="badge" id="badge-license" rel="noopener noreferrer" aria-label="View License">
+          <a href="https://github.com/RealMeddsam/Froststrap/blob/main/LICENSE" target="_blank" class="badge"
+            id="badge-license" rel="noopener noreferrer" aria-label="View License">
             License: <span>...</span>
           </a>
-          <a href="https://github.com/RealMeddsam/Froststrap/releases/latest" target="_blank" class="badge" id="badge-latest-downloads" rel="noopener noreferrer" aria-label="View Latest Downloads">
+          <a href="https://github.com/RealMeddsam/Froststrap/releases/latest" target="_blank" class="badge"
+            id="badge-latest-downloads" rel="noopener noreferrer" aria-label="View Latest Downloads">
             Latest Downloads: <span>...</span>
           </a>
-          <a href="https://github.com/RealMeddsam/Froststrap" target="_blank" class="badge" id="badge-total-downloads" rel="noopener noreferrer" aria-label="View Total Downloads">
+          <a href="https://github.com/RealMeddsam/Froststrap" target="_blank" class="badge"
+            id="badge-total-downloads" rel="noopener noreferrer" aria-label="View Total Downloads">
             Total Downloads: <span>...</span>
           </a>
         </div>
       </div>
+    </section>
+    
+    <div class="section-divider" aria-hidden="true"></div>
 
-      <div style="flex-grow: 1;"></div>
+    <!-- FEATURES SECTION -->
+    <section class="features-section">
+
+      <div class="feature-wrapper">
+        <details class="feature-page">
+          <summary>Integrations</summary>
+          <div class="feature-list">
+            <ul>
+              <li>Player and message logs are now combined into Logs Menu</li>
+              <li>Disable Roblox’s built-in screenshot and video recording system</li>
+              <li>Custom Froststrap Discord RPC that shows the current page/dialog</li>
+              <li>Replace "Playing Roblox" with the name of the game you're playing using Custom Status Display</li>
+              <li>Game history logging is now toggleable</li>
+              <li>PlayTime Counter shows both total and session playtime</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="feature-wrapper">
+        <details class="feature-page">
+          <summary>Bootstrapper</summary>
+          <div class="feature-list">
+            <ul>
+              <li>Switch between all of the classic Roblox icons for the top bar icon</li>
+              <li>Change the Roblox process priority</li>
+              <li>Automatically close the Roblox Crash Handler to reduce memory usage</li>
+              <li>Integrated cleaner tool to remove leftover files (feature was made by fishstrap first not us)</li>
+              <li>Multi-instance launching support</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="feature-wrapper">
+        <details class="feature-page">
+          <summary>Mods</summary>
+          <div class="feature-list">
+            <ul>
+              <li>Generate Mods using custom gradient colors easily</li>
+              <li>Quick use Custom Cursors and Custom Shiftlocks easily</li>
+              <li>Have multiple Custom Cursor Sets ready for use with the click of a button</li>
+              <li>Easily add custom death sounds</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="feature-wrapper">
+        <details class="feature-page">
+          <summary>FastFlag Enhancements</summary>
+          <div class="feature-list">
+            <ul>
+              <li>Toggle advanced settings</li>
+              <li>Better Profiles</li>
+              <li>Press Ctrl+Z and Ctrl+Y to Undo/Redo changes</li>
+              <li>Built-in FastFlag lists inside of the profiles dialog</li>
+              <li>Remove invalid/default flags and automatically update outdated ones in one click</li>
+              <li>Use Preset Column to help find which flags are toggleables in fastflag settings</li>
+              <li>FastFlag Warning system to help tell you about ban worthy fastflags</li>
+              <li>Select values quickly using the built-in value selector when adding flags</li>
+              <li>Use Find Flag feature to check all of Roblox’s FastFlags</li>
+              <li>Publish and Use other peoples published lists in Public Flag Lists</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="feature-wrapper">
+        <details class="feature-page">
+          <summary>UI & Appearance</summary>
+          <div class="feature-list">
+            <ul>
+              <li>Fully customizable bootstrapper launcher</li>
+              <li>Change the app font to any font you want</li>
+              <li>Supports animated GIF, image, and gradient backgrounds themes</li>
+              <li>Built-in App themes</li>
+              <li>Use element toolbox when creating custom launchers (prob removing soon cuz its hella useless)</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="feature-wrapper">
+        <details class="feature-page">
+          <summary>Settings</summary>
+          <div class="feature-list">
+            <ul>
+              <li>Disable Hardware Acceleration to lower froststrap memory usage</li>
+              <li>Disable Froststrap Animations to help with performance</li>
+              <li>Fixed auto update that won’t go off randomly</li>
+              <li>Easily switch Roblox update channels with action presets</li>
+              <li>Option to fully block Roblox updates</li>
+              <li>Quickly Reset/Import/Export all your settings in one place</li>
+              <li>Use the debug menu to read log files</li>
+              <li>Easily uninstall Froststrap if its not to your liking (you totally shouldn’t trust trust)</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="feature-wrapper">
+        <details class="feature-page">
+          <summary>Extra Features</summary>
+          <div class="feature-list">
+            <ul>
+              <li>Remembers the last opened page</li>
+              <li>Import settings from other bootstrappers easily like Fishstrap and Bloxstrap</li>
+              <li>Built-in PC tweaks for performance optimization</li>
+              <li>Create game shortcuts for faster game joining</li>
+              <li>The app includes a hidden Easter egg page and game</li>
+            </ul>
+         </div>
+        </details>
+      </div>
+
     </section>
 
-    <!-- Features Section -->
-    <section class="features-section">
-      <div class="feature-card">
-        <div class="feature-title">Custom Bootstrapper</div>
-        <div class="feature-desc">Launch Roblox with fully customized settings, flags, tweaks and mods tailored to your
-          needs</div>
+    <div class="section-divider" aria-hidden="true"></div>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-section" aria-label="FAQ">
+
+      <div class="feature-wrapper">
+        <details class="faq-item">
+          <summary>How do I install Froststrap?</summary>
+          <div class="faq-body">
+            Download the latest release from the Releases page and run the installer included.
+          </div>
+        </details>
       </div>
-      <div class="feature-card">
-        <div class="feature-title">Clean List</div>
-        <div class="feature-desc">Removes fake/invalid flags, default flags and updates outdated flags automatically with
-          an option to revert the changes</div>
+
+      <div class="feature-wrapper">
+        <details class="faq-item">
+          <summary>Is Froststrap safe to use?</summary>
+          <div class="faq-body">
+            Yes, Froststrap is a open-source project, You can check the repository for the code.
+          </div>
+        </details>
       </div>
-      <div class="feature-card">
-        <div class="feature-title">Find Flags</div>
-        <div class="feature-desc">Look through every fastflag inside of roblox and find hidden/unknown flags</div>
+
+      <div class="feature-wrapper">
+        <details class="faq-item">
+          <summary>Where can I report issues or request features?</summary>
+          <div class="faq-body">
+            Open an issue on the GitHub repository. Whiling providing the log files and a way to reproduce the issue. If you want a faster way, then create a support/bug report forum on our discord
+          </div>
+        </details>
       </div>
+
     </section>
 
     <footer>
@@ -328,29 +635,49 @@
     </footer>
   </div>
 
-  <!-- subtle flat snow layer at bottom -->
   <div id="snow-layer"></div>
 
   <script>
+    // Snowflakes (GPU-friendly transforms) — fixed distribution so flakes can appear at the very left edge
     const snowCount = 40;
     const snowContainer = document.getElementById('snowflake-container');
+
+    function getViewportWidth() {
+      return Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    }
 
     for (let i = 0; i < snowCount; i++) {
       const snowflake = document.createElement('div');
       snowflake.classList.add('snowflake');
-      snowflake.style.left = Math.random() * 100 + 'vw';
+
+      // Place using pixels (clamped) instead of vw to avoid rounding/scrollbar issues
+      const padding = 6; // pixels from edge so icon isn't cut off
+      const vw = getViewportWidth();
+      const x = Math.random() * Math.max(0, vw - padding * 2) + padding; // px
+      snowflake.style.left = x + 'px';
+
+      // size + GPU-friendly hints
       snowflake.style.fontSize = (Math.random() * 8 + 8) + 'px';
+      snowflake.style.willChange = 'transform, left';
 
-      // Random animation duration between 5s and 10s
-      const duration = (Math.random() * 5 + 5).toFixed(2);
-      snowflake.style.animationDuration = `${duration}s`;
-
-      // Random animation delay so flakes don't all start at the same time
+      // Random animation duration and delay
+      snowflake.style.animationDuration = `${(Math.random() * 5 + 5).toFixed(2)}s`;
       snowflake.style.animationDelay = `${(Math.random() * 10).toFixed(2)}s`;
       snowflake.textContent = '❄';
       snowContainer.appendChild(snowflake);
     }
 
+    // Recompute and reposition new flakes on resize so distribution remains full-width
+    window.addEventListener('resize', () => {
+      document.querySelectorAll('#snowflake-container .snowflake').forEach(s => {
+        const padding = 6;
+        const vw = getViewportWidth();
+        const x = Math.random() * Math.max(0, vw - padding * 2) + padding;
+        s.style.left = x + 'px';
+      });
+    });
+
+    // GitHub data (stars removed)
     const repoOwner = 'RealMeddsam';
     const repoName = 'Froststrap';
 
@@ -396,6 +723,102 @@
         badgeTotal.textContent = 'unknown';
       });
   </script>
-</body>
 
+  <script>
+    // Robust FAQ behavior: when a details opens, attach an internal click listener that closes it on clicks inside the body (but not on summary or on interactive elements like links/buttons).
+    document.querySelectorAll('details.faq-item').forEach(d => {
+      const summary = d.querySelector('summary');
+
+      // Helper to detect interactive elements where clicks should not auto-close
+      function isInteractive(el) {
+        if (!el) return false;
+        const interactiveTags = ['A','BUTTON','INPUT','TEXTAREA','SELECT','LABEL'];
+        if (interactiveTags.includes(el.tagName)) return true;
+        if (el.closest && el.closest('a, button, input, textarea, select, label')) return true;
+        return false;
+      }
+
+      function onToggle() {
+        // remove existing close listener if any
+        if (d._closeFn) {
+          d.removeEventListener('click', d._closeFn);
+          d._closeFn = null;
+        }
+        if (d.open) {
+          // add a click listener that closes on clicks inside the details except summary or interactive elements
+          d._closeFn = function(ev) {
+            // ignore clicks on summary or its descendants
+            if (summary.contains(ev.target)) return;
+            // ignore clicks on interactive elements inside faq body
+            if (isInteractive(ev.target)) return;
+            // close the details
+            d.open = false;
+          };
+          // attach listener so it fires after the default summary toggle
+          d.addEventListener('click', d._closeFn);
+        }
+      }
+
+      d.addEventListener('toggle', onToggle);
+
+      // accessibility: close on Escape
+      d.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && d.open) {
+          d.open = false;
+          summary.focus();
+        }
+      });
+    });
+  </script>
+
+  <script>
+    document.querySelectorAll("details").forEach((detail) => {
+      const summary = detail.querySelector("summary");
+      const content = detail.querySelector(".feature-list, .faq-body");
+    
+      content.style.height = "0";
+      content.style.opacity = "0";
+      content.style.overflow = "hidden";
+      content.style.transition = "height 0.35s ease, opacity 0.35s ease";
+    
+      summary.addEventListener("click", (e) => {
+        e.preventDefault();
+    
+        if (!detail.classList.contains("open")) {
+
+          detail.classList.add("open");
+          detail.setAttribute("open", "");
+          content.style.height = content.scrollHeight + "px";
+          content.style.opacity = "1";
+    
+          content.addEventListener(
+            "transitionend",
+            function setAuto() {
+              if (detail.classList.contains("open")) content.style.height = "auto";
+              content.removeEventListener("transitionend", setAuto);
+            }
+          );
+        } else {
+
+          const currentHeight = content.scrollHeight;
+          content.style.height = currentHeight + "px";
+          requestAnimationFrame(() => {
+            content.style.height = "0";
+            content.style.opacity = "0";
+          });
+
+          content.addEventListener(
+            "transitionend",
+            function removeOpen() {
+              detail.classList.remove("open");
+              detail.removeAttribute("open");
+              content.removeEventListener("transitionend", removeOpen);
+            }
+          );
+        }
+      });
+    });
+
+  </script>
+</body>
 </html>
