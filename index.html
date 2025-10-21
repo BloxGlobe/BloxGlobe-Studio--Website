@@ -206,7 +206,7 @@ let ROBLOX_AVAILABLE = true;
 async function checkRobloxStatus(){
   try {
     const r = await fetch('https://status.roblox.com/api/v2/status.json');
-    if(!r.ok){ ROBLOX_AVAILABLE = true; showRobloxDown(); return; }
+    if(!r.ok){ ROBLOX_AVAILABLE = false; showRobloxDown(); return; }
     const j = await r.json(); // sample shape { status: { indicator: 'none'|'minor'|... }, ... }
     // Simple heuristic: if indicator === 'none' then OK, else treat as issue
     if(j?.status?.indicator && j.status.indicator !== 'none'){ ROBLOX_AVAILABLE = false; showRobloxDown(); } else { ROBLOX_AVAILABLE = true; hideRobloxDown(); }
@@ -392,7 +392,7 @@ el('closeSettings').addEventListener('click', ()=>{ el('modalBackdrop').style.di
 
 function loadSettings(){ const cfg = JSON.parse(localStorage.getItem(STORAGE.MEDIA) || 'null'); if(cfg){ el('mediaType').value = cfg.type; el('mediaInput').value = cfg.value;} else { el('mediaType').value='none'; el('mediaInput').value=''; } renderMediaPlayer(); }
 
-/* ---------- Roblox status initial check every minute when down, otherwise every 5 minutes ---------- */
+/* ---------- Roblox status initial check every minute when down, otherwise every 1 minutes ---------- */
 checkRobloxStatus();
 setInterval(()=>{ checkRobloxStatus(); }, 60 * 1000); // keep frequent checks for status (1 min) — it will toggle play state
 
