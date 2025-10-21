@@ -206,7 +206,7 @@ let ROBLOX_AVAILABLE = true;
 async function checkRobloxStatus(){
   try {
     const r = await fetch('https://status.roblox.com/api/v2/status.json');
-    if(!r.ok){ ROBLOX_AVAILABLE = false; showRobloxDown(); return; }
+    if(!r.ok){ ROBLOX_AVAILABLE = true; showRobloxDown(); return; }
     const j = await r.json(); // sample shape { status: { indicator: 'none'|'minor'|... }, ... }
     // Simple heuristic: if indicator === 'none' then OK, else treat as issue
     if(j?.status?.indicator && j.status.indicator !== 'none'){ ROBLOX_AVAILABLE = false; showRobloxDown(); } else { ROBLOX_AVAILABLE = true; hideRobloxDown(); }
