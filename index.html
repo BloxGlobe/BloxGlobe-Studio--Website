@@ -6,20 +6,30 @@
 <title>BloxGlobe Studios™</title>
 <link rel="icon" href="3318f28d-0ae1-4969-b037-969e8e7b4b12.png" />
 <style>
-  :root{--accent:#00aaff;--dark:#0b0e17;--card:#111526;--light:#e6f4ff;--muted:#c8d7e1;--glass:rgba(255,255,255,0.03)}
+  :root{
+    --accent:#00aaff; --dark:#0b0e17; --card:#111526; --light:#e6f4ff; --muted:#c8d7e1;
+    --glass: rgba(255,255,255,0.03);
+  }
+  [data-theme="light"]{
+    --accent:#0077cc; --dark:#f5f7fb; --card:#fff; --light:#03203b; --muted:#415463; --glass: rgba(0,0,0,0.04);
+  }
   *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,Arial,sans-serif}
-  body{background:radial-gradient(circle at top,#0b0e17,#060810 80%);color:var(--light);-webkit-font-smoothing:antialiased}
+  html,body{height:100%}
+  body{background:radial-gradient(circle at top,#0b0e17,#060810 80%);color:var(--light);-webkit-font-smoothing:antialiased;overflow-x:hidden}
   a{color:var(--accent);text-decoration:none}
   header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:var(--glass);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.04);position:sticky;top:0;z-index:60}
   .logo{display:flex;align-items:center;gap:12px}
-  .logo img{width:48px;height:48px;border-radius:12px;object-fit:contain;background:rgba(255,255,255,0.02);padding:6px}
+  .logo img{width:48px;height:48px;border-radius:8px;object-fit:contain;background:rgba(255,255,255,0.02);padding:6px}
+  .brand{font-weight:800;font-size:1.05rem}
   nav{display:flex;gap:14px}
   nav a{color:var(--muted);font-weight:600}
+  nav a:hover{color:var(--accent)}
   main{max-width:1100px;margin:26px auto;padding:20px}
   .hero{text-align:center;padding:18px}
   .main-heading{font-size:2.1rem;color:var(--light);margin-bottom:6px}
   .main-sub{color:var(--muted);margin-bottom:14px}
 
+  /* Games */
   .games{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:18px}
   .game-card{background:var(--card);border-radius:14px;padding:16px;box-shadow:0 10px 26px rgba(0,0,0,0.45);position:relative;overflow:hidden;transition:transform .18s,box-shadow .18s}
   .game-card:hover{transform:translateY(-6px);box-shadow:0 18px 36px rgba(0,0,0,0.55)}
@@ -28,12 +38,13 @@
   .game-desc{color:var(--muted);font-size:0.95rem;min-height:44px}
   .game-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;align-items:center}
   .meta-pill{background:rgba(255,255,255,0.02);padding:6px 10px;border-radius:10px;color:var(--muted);font-weight:700;font-size:0.9rem}
-  .game-actions{display:flex;gap:8px;margin-top:12px}
+  .game-actions{display:flex;gap:8px;margin-top:12px;align-items:center}
   .btn{padding:8px 12px;border-radius:10px;background:var(--accent);color:#031022;font-weight:800;text-decoration:none;border:none;cursor:pointer}
   .btn.secondary{background:transparent;color:var(--accent);border:1px solid rgba(255,255,255,0.06)}
   .btn.ghost{background:transparent;color:var(--muted);border:1px dashed rgba(255,255,255,0.04)}
-  .coming-soon{display:flex;align-items:center;justify-content:center;min-height:200px;font-size:1.15rem;color:var(--accent)}
+  .disabled{opacity:0.5;pointer-events:none}
 
+  /* Update Log */
   .update-log{margin-top:22px;padding:14px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.03));box-shadow:0 8px 20px rgba(0,0,0,0.35)}
   .update-item{display:flex;justify-content:space-between;gap:12px;padding:12px;background:var(--card);border-radius:10px;margin-bottom:10px;align-items:flex-start}
   .update-left{max-width:78%}
@@ -41,35 +52,50 @@
   .update-text{color:var(--muted)}
   .update-actions{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
 
+  /* About */
   .about{margin-top:22px;padding:18px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.03));box-shadow:0 8px 20px rgba(0,0,0,0.35);text-align:center}
   .dev-logo{width:110px;height:110px;border-radius:16px;object-fit:cover;margin-bottom:12px;background:rgba(255,255,255,0.03)}
   .dev-name{color:var(--accent);font-weight:800;margin-bottom:6px}
   .dev-bio{color:var(--muted)}
 
+  /* footer */
   footer{margin-top:28px;padding:18px;text-align:center;color:var(--muted);font-size:0.9rem}
 
+  /* settings modal */
   .settingsBtn{position:fixed;right:18px;bottom:18px;background:var(--card);color:var(--accent);padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);z-index:140;cursor:pointer;box-shadow:0 12px 30px rgba(0,0,0,0.5)}
   .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.55);display:none;align-items:center;justify-content:center;z-index:150}
   .modal{width:94%;max-width:760px;background:var(--card);border-radius:12px;padding:16px;color:var(--light);box-shadow:0 20px 50px rgba(0,0,0,0.6)}
-  input[type="text"], textarea, select {flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--light)}
+  .modal h3{color:var(--accent);margin-bottom:8px}
+  .fields{display:flex;gap:8px;margin-bottom:8px}
+  input[type="text"], input[type="url"], textarea, select {flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--light)}
   .small{font-size:0.9rem;color:var(--muted)}
   .edit-btn{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);padding:6px;border-radius:8px;cursor:pointer}
 
+  /* inline editable */
+  .editable{outline:2px dashed rgba(0,170,255,0.12);padding:6px;border-radius:6px}
+
   @media (max-width:820px){ .logo img{width:40px;height:40px} nav{display:none} .games{grid-template-columns:1fr} .modal{max-width:95%} }
-  /* spinner overlay */
-  .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:9999;flex-direction:column;color:#fff}
+
+  /* overlay */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);display:none;align-items:center;justify-content:center;z-index:9999;flex-direction:column;color:#fff}
   .spinner{width:72px;height:72px;border-radius:50%;border:8px solid rgba(255,255,255,0.12);border-top-color:var(--accent);animation:spin 1s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* particles */
+  .particle-layer{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+  .p{position:absolute;top:-20px;opacity:0.9;will-change:transform,opacity}
+  .p.snow{color:#e6f4ff}
+  .p.fire{filter:drop-shadow(0 0 8px rgba(255,120,20,0.75))}
+  @keyframes fallDown{0%{transform:translateY(-10vh) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(360deg);opacity:0.05}}
+  /* toast */
+  .toast{position:fixed;left:50%;transform:translateX(-50%);top:18px;background:rgba(0,0,0,0.8);color:#fff;padding:10px 14px;border-radius:10px;z-index:99999;box-shadow:0 8px 30px rgba(0,0,0,0.6)}
 </style>
 </head>
 <body>
   <header>
     <div class="logo">
-      <img id="siteLogo" src="3318f28d-0ae1-4969-b037-969e8e7b4b12.png" alt="BloxGlobe logo" />
-      <div>
-        <div class="brand">BloxGlobe Studios™</div>
-        <div class="small" style="color:var(--muted)">Roblox Developer Studio</div>
-      </div>
+      <img id="siteLogo" src="f79f5ae8-e979-4db1-a801-1be17a2df071.png" alt="Roblox logo">
+      <div class="brand">BloxGlobe Studios™</div>
     </div>
     <nav aria-label="Main nav">
       <a href="#games">Games</a>
@@ -86,14 +112,16 @@
 
     <section id="games">
       <h2 style="color:var(--accent)">Our Games</h2>
-      <div class="games" id="gameList"></div>
+      <div class="games" id="gameList">
+        <!-- Cards inserted by JS -->
+      </div>
     </section>
 
     <section id="update-log" class="update-log" aria-live="polite">
       <h2 style="color:var(--accent)">Update Log</h2>
-      <p class="small">Updates posted to our WhatsApp channel — this feed can be edited locally via Settings (Edit Mode).</p>
+      <p class="small">Updates posted to our WhatsApp channel — follow to get notifications.</p>
       <div id="updates" style="margin-top:12px"></div>
-      <div style="text-align:center;margin-top:12px"><a class="btn" href="https://whatsapp.com/channel/0029Vb7jfKbH5JM6ceBswz3M" target="_blank">View Channel on WhatsApp</a></div>
+      <div style="text-align:center;margin-top:12px"><a class="btn" href="https://whatsapp.com/channel/0029Vb7jfKbH5JM6ceBswz3M" target="_blank">Follow Our WhatsApp Channel</a></div>
     </section>
 
     <section id="about" class="about">
@@ -101,27 +129,32 @@
       <div class="dev-name" id="devName">@blox_fruits20307</div>
       <div class="dev-bio" id="devBio">Founder & developer — I create and update games and post announcements on our WhatsApp Channel.</div>
       <div style="margin-top:12px;display:flex;gap:8px;justify-content:center">
-        <a class="btn secondary" target="_blank" id="robloxProfile">View Roblox</a>
+        <a class="btn secondary" id="robloxProfile" target="_blank">View Roblox Profile</a>
         <a class="btn" href="https://whatsapp.com/channel/0029Vb7jfKbH5JM6ceBswz3M" target="_blank">Join WhatsApp Channel</a>
       </div>
     </section>
   </main>
 
-  <footer>© <span id="year"></span> BloxGlobe Studios™ · All rights reserved.</footer>
+  <footer>
+    © <span id="year"></span> BloxGlobe Studios™ · All rights reserved.
+  </footer>
 
   <button class="settingsBtn" id="settingsBtn" title="Settings">⚙️</button>
 
   <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true">
       <h3>Settings & Edit Mode</h3>
+
       <div style="margin-bottom:8px">
-        <label class="small">Edit Mode (toggle to enable on-page edits)</label>
+        <label class="small">Edit Mode (admin)</label>
         <div style="display:flex;gap:8px;margin-top:6px">
           <button id="toggleEdit" class="btn secondary">Toggle Edit Mode</button>
           <div class="small" id="editState">Edit Mode: Off</div>
         </div>
       </div>
+
       <hr style="margin:10px 0;border:none;border-top:1px solid rgba(255,255,255,0.04)" />
+
       <div style="margin-bottom:10px">
         <label class="small">Theme</label>
         <div style="display:flex;gap:8px;margin-top:6px">
@@ -129,15 +162,28 @@
           <div class="small" id="themeLabel">Theme: Dark</div>
         </div>
       </div>
+
       <hr style="margin:10px 0;border:none;border-top:1px solid rgba(255,255,255,0.04)" />
+
       <h4 style="color:var(--accent);margin-bottom:6px">Music / Media</h4>
-      <div style="display:flex;gap:8px;margin-bottom:8px">
-        <select id="mediaType"><option value="none">Select</option><option value="roblox">Roblox Sound ID</option><option value="youtube">YouTube URL</option><option value="spotify">Spotify URL</option></select>
+      <div class="fields">
+        <select id="mediaType">
+          <option value="none">Select</option>
+          <option value="roblox">Roblox Sound ID</option>
+          <option value="youtube">YouTube URL</option>
+          <option value="spotify">Spotify URL</option>
+        </select>
         <input id="mediaInput" type="text" placeholder="Paste ID or URL here" />
         <button id="saveMedia" class="btn">Save</button>
       </div>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+        <button id="toggleRepeat" class="btn secondary">Repeat: Off</button>
+        <div class="small">Click play in player area to use</div>
+      </div>
       <div id="playerArea" style="margin-top:10px"></div>
+
       <hr style="margin:10px 0;border:none;border-top:1px solid rgba(255,255,255,0.04)" />
+
       <h4 style="color:var(--accent);margin-bottom:6px">Update Log (Admin)</h4>
       <textarea id="newUpdateText" placeholder="Write a short update..." style="width:100%;height:70px;padding:8px;border-radius:8px;background:transparent;color:var(--light)"></textarea>
       <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
@@ -153,252 +199,394 @@
 
   <div class="overlay" id="overlay"><div class="spinner"></div><div style="margin-top:12px">Updating website…</div></div>
 
+  <div class="particle-layer" id="particles"></div>
+
 <script>
-/* ---------- config ---------- */
+/* ---------- constants & storage keys ---------- */
 const STORAGE = { THEME:'bg_theme', EDIT:'bg_edit_mode', UPDATES:'bg_updates', MEDIA:'bg_media', GAMES_META:'bg_games_meta' };
 const DEV_USER_ID = 5525937576;
-const GAME_PLACE_IDS = [135869717619701, 85250100428738]; // two projects only
-const FALLBACK_THUMB = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="512" height="300"><rect width="100%" height="100%" fill="#081021"/><text x="50%" y="50%" fill="#3aa8ff" font-size="20" text-anchor="middle" dominant-baseline="middle">BloxGlobe</text></svg>');
+const GAMES = [
+  { placeId: 135869717619701, url: 'https://www.roblox.com/games/135869717619701/Beta' }, // ReadyNode [Beta]
+  { placeId: 85250100428738,  url: 'https://www.roblox.com/games/85250100428738/R25' }    // R25
+];
+const WHATSAPP = 'https://whatsapp.com/channel/0029Vb7jfKbH5JM6ceBswz3M';
+const ADMIN_PASSPHRASE = 'SpotifyLover.To';
 
-/* Minimal local metadata fallback when Roblox endpoints fail */
-const LOCAL_GAME_META = {
-  "135869717619701": { name: "ReadyNode [Beta]", description: "A fast-paced Roblox game — beta." },
-  "85250100428738":  { name: "R25", description: "R25 — exciting BloxGlobe experience." }
-};
-
-document.getElementById('year').innerText = new Date().getFullYear();
+/* ---------- small helpers ---------- */
 const el = id => document.getElementById(id);
+function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
 
-/* ---------- Theme ---------- */
+/* ---------- year & profile link fix ---------- */
+el('year').innerText = new Date().getFullYear();
+el('robloxProfile').href = `https://www.roblox.com/users/${DEV_USER_ID}/profile`;
+
+/* ---------- theme ---------- */
 function setTheme(t){ if(t==='light') document.documentElement.setAttribute('data-theme','light'); else document.documentElement.removeAttribute('data-theme'); el('themeLabel').innerText = `Theme: ${t==='light'?'Light':'Dark'}`; localStorage.setItem(STORAGE.THEME,t); }
-el('toggleTheme').addEventListener('click', ()=> { const cur = localStorage.getItem(STORAGE.THEME)||'dark'; setTheme(cur==='dark'?'light':'dark'); });
-setTheme(localStorage.getItem(STORAGE.THEME)||'dark');
+el('toggleTheme').addEventListener('click', ()=>{ const cur = localStorage.getItem(STORAGE.THEME) || 'dark'; setTheme(cur==='dark'?'light':'dark'); });
+setTheme(localStorage.getItem(STORAGE.THEME) || 'dark');
 
-/* ---------- Edit Mode (protected) ---------- */
+/* ---------- Edit Mode (admin protected) ---------- */
 function isEditMode(){ return localStorage.getItem(STORAGE.EDIT) === '1'; }
-function setEditMode(v){ localStorage.setItem(STORAGE.EDIT, v ? '1' : '0'); el('editState').innerText = `Edit Mode: ${v ? 'On' : 'Off'}`; renderAll(); }
-el('toggleEdit').addEventListener('click', ()=>{
-  if(isEditMode()){
-    setEditMode(false);
-    return;
-  }
-  const pass = prompt('Enter admin passphrase to enable edit mode:');
-  if(pass === null) return;
-  // verify phrase (your phrase is SpotifyLover.To)
-  if(pass === 'SpotifyLover.To'){ setEditMode(true); alert('Edit Mode enabled.'); }
-  else alert('Incorrect passphrase.');
+function setEditMode(v){ localStorage.setItem(STORAGE.EDIT, v ? '1' : '0'); el('editState').innerText = `Edit Mode: ${v ? 'On' : 'Off'}`; renderUpdates(); renderGames(); }
+el('toggleEdit').addEventListener('click', ()=> {
+  if(isEditMode()){ setEditMode(false); return; }
+  const pass = prompt('Enter admin passphrase:');
+  if(pass === ADMIN_PASSPHRASE){ setEditMode(true); alert('Edit Mode enabled'); } else { alert('Incorrect passphrase'); }
 });
-setEditMode(localStorage.getItem(STORAGE.EDIT) === '1');
 
-/* ---------- Updates ---------- */
-function loadUpdates(){ const r = localStorage.getItem(STORAGE.UPDATES); if(!r){ const seed=[{date:'Oct 18, 2025',text:'Site Launch — BloxGlobe Studios™ official site is live!',source:'manual'}]; localStorage.setItem(STORAGE.UPDATES,JSON.stringify(seed)); return seed;} try{return JSON.parse(r);}catch(e){return [];}}
+/* ---------- Updates (local) ---------- */
+function loadUpdates(){ const r = localStorage.getItem(STORAGE.UPDATES); if(!r){ const seed=[{date:'Oct 18, 2025',text:'Site Launch — BloxGlobe Studios™ official site is live!',source:'manual'}]; localStorage.setItem(STORAGE.UPDATES,JSON.stringify(seed)); return seed; } try{return JSON.parse(r);}catch(e){return [];} }
 function saveUpdates(arr){ localStorage.setItem(STORAGE.UPDATES, JSON.stringify(arr)); renderUpdates(); }
-function renderUpdates(){ const container = el('updates'); container.innerHTML=''; const list = loadUpdates(); if(!list.length){ container.innerHTML='<p class="small">No updates yet.</p>'; return; } list.slice().reverse().forEach((u, idxRev)=>{ const idx = list.length -1 - idxRev; const div = document.createElement('div'); div.className='update-item'; div.innerHTML = `<div class="update-left"><div class="update-date">${escapeHtml(u.date)}</div><div class="update-text">${escapeHtml(u.text)}</div></div>`; const right = document.createElement('div'); right.className='update-actions'; const meta = document.createElement('div'); meta.className='small'; meta.innerText = u.source || 'manual'; right.appendChild(meta); if(isEditMode()){ const edit = document.createElement('button'); edit.className='edit-btn'; edit.innerText='✏️ Edit'; edit.addEventListener('click', ()=>{ const newText = prompt('Edit update text:', u.text); if(newText!==null){ u.text = newText; const arr = loadUpdates(); arr[idx] = u; saveUpdates(arr); } }); const del = document.createElement('button'); del.className='edit-btn'; del.innerText='🗑 Delete'; del.addEventListener('click', ()=>{ if(confirm('Delete this update?')){ const arr = loadUpdates(); arr.splice(idx,1); saveUpdates(arr);} }); right.appendChild(edit); right.appendChild(del); } div.appendChild(right); container.appendChild(div); }); }
-el('addUpdate').addEventListener('click', ()=>{ if(!isEditMode()){ alert('Enable Edit Mode in Settings to add updates.'); return;} const txt = el('newUpdateText').value.trim(); const dt = el('newUpdateDate').value.trim() || new Date().toLocaleDateString(); if(!txt){ alert('Write something first'); return; } const arr = loadUpdates(); arr.push({date:dt,text:txt,source:'manual'}); saveUpdates(arr); el('newUpdateText').value=''; el('newUpdateDate').value='';});
+function renderUpdates(){
+  const container = el('updates'); container.innerHTML = '';
+  const list = loadUpdates();
+  if(list.length===0){ container.innerHTML = '<p class="small">No updates yet.</p>'; return; }
+  list.slice().reverse().forEach((u, idxRev) => {
+    const idx = list.length - 1 - idxRev;
+    const div = document.createElement('div'); div.className = 'update-item';
+    div.innerHTML = `<div class="update-left"><div class="update-date">${escapeHtml(u.date)}</div><div class="update-text">${escapeHtml(u.text)}</div></div>`;
+    const right = document.createElement('div'); right.className = 'update-actions';
+    const meta = document.createElement('div'); meta.className = 'small'; meta.innerText = u.source || 'manual'; right.appendChild(meta);
+    if(isEditMode()){
+      const edit = document.createElement('button'); edit.className='edit-btn'; edit.innerText='✏️ Edit';
+      edit.addEventListener('click', ()=>{ const newText = prompt('Edit update text:', u.text); if(newText !== null){ u.text = newText; const arr = loadUpdates(); arr[idx] = u; saveUpdates(arr); }});
+      const del = document.createElement('button'); del.className='edit-btn'; del.innerText='🗑 Delete';
+      del.addEventListener('click', ()=>{ if(confirm('Delete this update?')){ const arr = loadUpdates(); arr.splice(idx,1); saveUpdates(arr); }});
+      right.appendChild(edit); right.appendChild(del);
+    }
+    div.appendChild(right); container.appendChild(div);
+  });
+}
+el('addUpdate').addEventListener('click', ()=> {
+  if(!isEditMode()){ alert('Enable Edit Mode (admin) to add updates.'); return; }
+  const txt = el('newUpdateText').value.trim(); const dt = el('newUpdateDate').value.trim() || new Date().toLocaleDateString();
+  if(!txt){ alert('Write something first'); return; }
+  const arr = loadUpdates(); arr.push({date:dt, text:txt, source:'manual'}); saveUpdates(arr);
+  el('newUpdateText').value=''; el('newUpdateDate').value='';
+});
 el('exportUpdates').addEventListener('click', ()=>{ navigator.clipboard.writeText(localStorage.getItem(STORAGE.UPDATES) || '[]').then(()=>alert('Updates JSON copied to clipboard.')); });
 
-/* ---------- Media player ---------- */
-el('saveMedia').addEventListener('click', ()=>{ const t = el('mediaType').value; const v = el('mediaInput').value.trim(); if(t==='none' || !v){ alert('Choose type and paste ID/URL'); return; } localStorage.setItem(STORAGE.MEDIA, JSON.stringify({type:t, value:v})); renderMediaPlayer(); alert('Saved media settings. Use player controls to play.'); });
-function renderMediaPlayer(){ const box = el('playerArea'); box.innerHTML=''; const cfg = JSON.parse(localStorage.getItem(STORAGE.MEDIA) || 'null'); if(!cfg) return; if(cfg.type==='roblox'){ const audio = document.createElement('audio'); audio.controls=true; audio.preload='none'; audio.src = `https://assetdelivery.roblox.com/v1/asset/?id=${encodeURIComponent(cfg.value)}`; box.appendChild(audio);} else if(cfg.type==='youtube'){ let url = cfg.value; try{const u=new URL(cfg.value); let id=''; if(u.hostname.includes('youtube.com')) id = u.searchParams.get('v'); if(u.hostname.includes('youtu.be')) id = u.pathname.slice(1); if(id) url = `https://www.youtube.com/embed/${id}?rel=0`; }catch(e){} const iframe=document.createElement('iframe'); iframe.width='100%'; iframe.height='140'; iframe.allow='autoplay; encrypted-media'; iframe.src=url; box.appendChild(iframe);} else if(cfg.type==='spotify'){ let url=cfg.value; try{const u=new URL(cfg.value); if(u.hostname.includes('spotify.com')) url = `https://open.spotify.com/embed${u.pathname}${u.search}`;}catch(e){} const iframe=document.createElement('iframe'); iframe.width='100%'; iframe.height='140'; iframe.allow='autoplay; encrypted-media'; iframe.src=url; box.appendChild(iframe);} }
+/* ---------- Media player + repeat ---------- */
+el('saveMedia').addEventListener('click', ()=> {
+  const t = el('mediaType').value; const v = el('mediaInput').value.trim();
+  if(t==='none' || !v){ alert('Choose type and paste ID/URL'); return; }
+  localStorage.setItem(STORAGE.MEDIA, JSON.stringify({type:t, value:v}));
+  renderMediaPlayer(); alert('Saved media settings.');
+});
+el('toggleRepeat').addEventListener('click', ()=> {
+  const cfg = JSON.parse(localStorage.getItem(STORAGE.MEDIA) || 'null') || {};
+  cfg.repeat = !cfg.repeat;
+  localStorage.setItem(STORAGE.MEDIA, JSON.stringify(cfg));
+  el('toggleRepeat').innerText = `Repeat: ${cfg.repeat ? 'On' : 'Off'}`;
+});
 
-/* ---------- Roblox status check ---------- */
+function renderMediaPlayer(){
+  const box = el('playerArea'); box.innerHTML = '';
+  const cfg = JSON.parse(localStorage.getItem(STORAGE.MEDIA) || 'null');
+  if(!cfg) return;
+  el('toggleRepeat').innerText = `Repeat: ${cfg.repeat ? 'On' : 'Off'}`;
+  if(cfg.type === 'roblox'){
+    const audio = document.createElement('audio'); audio.controls=true; audio.preload='none'; audio.src = `https://assetdelivery.roblox.com/v1/asset/?id=${encodeURIComponent(cfg.value)}`;
+    audio.addEventListener('ended', ()=>{ if((JSON.parse(localStorage.getItem(STORAGE.MEDIA)||'null')||{}).repeat) audio.play(); });
+    box.appendChild(audio);
+  } else if(cfg.type === 'youtube'){
+    // embed youtube
+    let url = cfg.value;
+    try{ const u = new URL(cfg.value); let id=''; if(u.hostname.includes('youtube.com')) id = u.searchParams.get('v'); if(u.hostname.includes('youtu.be')) id = u.pathname.slice(1); if(id) url = `https://www.youtube.com/embed/${id}?rel=0&enablejsapi=1`; }catch(e){}
+    const iframe = document.createElement('iframe'); iframe.width='100%'; iframe.height='160'; iframe.allow='autoplay; encrypted-media'; iframe.src = url;
+    box.appendChild(iframe);
+  } else if(cfg.type === 'spotify'){
+    let url = cfg.value;
+    try{ const u = new URL(cfg.value); if(u.hostname.includes('spotify.com')) url = `https://open.spotify.com/embed${u.pathname}${u.search}`; }catch(e){}
+    const iframe = document.createElement('iframe'); iframe.width='100%'; iframe.height='160'; iframe.allow='autoplay; encrypted-media'; iframe.src = url;
+    box.appendChild(iframe);
+  }
+}
+
+/* ---------- Robust Roblox status check + toast ---------- */
 let ROBLOX_AVAILABLE = true;
+let statusTimer = null;
+
+async function tryFetchWithTimeout(url, timeout = 5000){
+  const ctrl = new AbortController();
+  const id = setTimeout(()=>ctrl.abort(), timeout);
+  try{
+    const r = await fetch(url, { signal: ctrl.signal, cache:'no-store' });
+    clearTimeout(id);
+    if(!r.ok) throw new Error('non-ok ' + r.status);
+    return await r.json();
+  } finally { clearTimeout(id); }
+}
+
+function showToast(msg, ms=60000){
+  // show top-center toast for ms (default 1 minute)
+  let t = document.querySelector('.toast'); if(t) t.remove();
+  t = document.createElement('div'); t.className='toast'; t.innerText = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>{ t.remove(); }, ms);
+}
+
+async function setRobloxAvailable(isAvailable){
+  ROBLOX_AVAILABLE = !!isAvailable;
+  if(!ROBLOX_AVAILABLE){
+    // disable play buttons
+    document.querySelectorAll('.game-card a.play-btn').forEach(b=>{ b.classList.add('disabled'); });
+    showToast('⚠️ Hey there! Roblox is currently down.', 60_000);
+    // while down, check every 60s
+    if(statusTimer) clearInterval(statusTimer);
+    statusTimer = setInterval(checkRobloxStatus, 60*1000);
+  } else {
+    document.querySelectorAll('.game-card a.play-btn').forEach(b=>{ b.classList.remove('disabled'); });
+    showToast('✅ Roblox services are up!', 60_000);
+    // normal checks every 5 minutes
+    if(statusTimer) clearInterval(statusTimer);
+    statusTimer = setInterval(checkRobloxStatus, 5*60*1000);
+  }
+}
+
 async function checkRobloxStatus(){
-  try {
-    const r = await fetch('https://status.roblox.com/api/v2/status.json');
-    if(!r.ok){ ROBLOX_AVAILABLE = false; showRobloxDown(); return; }
-    const j = await r.json(); // sample shape { status: { indicator: 'none'|'minor'|... }, ... }
-    // Simple heuristic: if indicator === 'none' then OK, else treat as issue
-    if(j?.status?.indicator && j.status.indicator !== 'none'){ ROBLOX_AVAILABLE = false; showRobloxDown(); } else { ROBLOX_AVAILABLE = true; hideRobloxDown(); }
-  } catch(e){
-    ROBLOX_AVAILABLE = false; showRobloxDown();
+  const endpoints = ['https://status.roblox.com/api/v2/status.json','https://status.roblox.com/api/v2/status'];
+  for(let attempt=0; attempt<2; attempt++){
+    for(const url of endpoints){
+      try{
+        const json = await tryFetchWithTimeout(url, 5000);
+        // Try different possible shapes
+        const indicator = json?.status?.indicator ?? json?.status?.state ?? null;
+        const healthy = indicator && ['none','operational','ok','online'].includes(String(indicator).toLowerCase());
+        if(indicator == null){
+          // fallback: check components
+          const comps = json?.components; if(Array.isArray(comps) && comps.length){
+            const anyDown = comps.some(c => { const s = (c?.status||'').toLowerCase(); return s && !['operational','ok','none','online'].includes(s); });
+            if(!anyDown){ await setRobloxAvailable(true); return true; }
+          }
+        } else {
+          await setRobloxAvailable(healthy);
+          return healthy;
+        }
+      }catch(e){
+        // try next
+      }
+    }
+    await sleep(1500);
   }
-}
-function showRobloxDown(){
-  // show toast and disable play buttons
-  if(!document.getElementById('roblox-down-toast')){
-    const t = document.createElement('div'); t.id='roblox-down-toast'; t.style.position='fixed'; t.style.right='18px'; t.style.top='18px'; t.style.zIndex=9999; t.style.background='crimson'; t.style.color='#fff'; t.style.padding='10px 12px'; t.style.borderRadius='8px'; t.innerText='⚠ Roblox site is not available at the moment';
-    document.body.appendChild(t);
-  }
-  document.querySelectorAll('.game-card a.btn').forEach(b=>{ b.classList.add('disabled'); b.style.pointerEvents='none'; b.style.opacity='0.5'; });
-}
-function hideRobloxDown(){ const t = document.getElementById('roblox-down-toast'); if(t) t.remove(); document.querySelectorAll('.game-card a.btn').forEach(b=>{ b.classList.remove('disabled'); b.style.pointerEvents='auto'; b.style.opacity='1'; }); }
-
-/* ---------- Utilities ---------- */
-function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-/* ---------- Games meta storage ---------- */
-function loadGamesMeta(){ try{ return JSON.parse(localStorage.getItem(STORAGE.GAMES_META) || '{}'); }catch(e){ return {}; } }
-function saveGamesMeta(obj){ localStorage.setItem(STORAGE.GAMES_META, JSON.stringify(obj)); }
-
-/* ---------- Robust thumbnail loader with retries ---------- */
-async function loadThumbnailWithRetry(universeId, attempts=3){
-  if(!universeId) return null;
-  const url = `https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=256x256&format=Png`;
-  for(let i=0;i<attempts;i++){
-    try {
-      const r = await fetch(url);
-      if(!r.ok) continue;
-      const j = await r.json();
-      const img = j?.data?.[0]?.imageUrl;
-      if(img) return img;
-    } catch(e){ /* retry */ }
-  }
-  return null;
+  await setRobloxAvailable(false);
+  return false;
 }
 
-/* ---------- fetch helpers ---------- */
+/* ---------- thumbnails & game info (with fallbacks) ---------- */
 async function fetchUniverseForPlace(placeId){
-  try {
-    const r = await fetch(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`);
-    if(!r.ok) return null;
-    const j = await r.json();
-    return j.universeId || null;
-  } catch(e){ return null; }
+  try{ const r = await fetch(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`); if(!r.ok) return null; const j = await r.json(); return j.universeId || null; }catch(e){return null;}
 }
 async function fetchGameInfo(universeId){
-  try {
-    const r = await fetch(`https://games.roblox.com/v1/games?universeIds=${universeId}`);
-    if(!r.ok) return null;
-    const j = await r.json();
-    return j.data?.[0] || null;
-  } catch(e){ return null; }
+  try{ const r = await fetch(`https://games.roblox.com/v1/games?universeIds=${universeId}`); if(!r.ok) return null; const j = await r.json(); return j.data?.[0] || null; }catch(e){return null;}
+}
+async function fetchIcon(universeId){
+  try{ const r = await fetch(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=256x256&format=Png`); if(!r.ok) return null; const j = await r.json(); return j.data?.[0]?.imageUrl || null; }catch(e){return null;}
 }
 
-/* ---------- Create game card with fallbacks and admin editable fields ---------- */
-async function createGameCard(placeId){
-  const container = document.createElement('div'); container.className='game-card';
-  const titleEl = document.createElement('div'); titleEl.className='game-title'; titleEl.textContent = 'Loading...';
-  const descEl = document.createElement('div'); descEl.className='game-desc'; descEl.textContent = 'Fetching...';
-  const thumb = document.createElement('img'); thumb.className='game-thumb'; thumb.alt='game thumb';
-  thumb.src = FALLBACK_THUMB;
+const LOCAL_META = {
+  "135869717619701": { name:"ReadyNode [Beta]", description:"A fast-paced Roblox game — beta." },
+  "85250100428738":  { name:"R25", description:"R25 — exciting BloxGlobe experience." }
+};
 
-  container.appendChild(thumb); container.appendChild(titleEl); container.appendChild(descEl);
+function loadGamesMeta(){ try{ return JSON.parse(localStorage.getItem(STORAGE.GAMES_META) || '{}'); }catch(e){return {}; } }
+function saveGamesMeta(obj){ localStorage.setItem(STORAGE.GAMES_META, JSON.stringify(obj)); }
 
+/* ---------- create card ---------- */
+async function createGameCard(p){
+  const placeId = p.placeId;
+  const root = document.createElement('div'); root.className='game-card';
+  // title
+  const title = document.createElement('div'); title.className='game-title'; title.textContent='Loading...';
+  // thumb
+  const thumb = document.createElement('img'); thumb.className='game-thumb'; thumb.alt='thumb';
+  thumb.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="512" height="300"><rect width="100%" height="100%" fill="#081021"/><text x="50%" y="50%" fill="#3aa8ff" font-size="20" text-anchor="middle" dominant-baseline="middle">BloxGlobe</text></svg>`);
+  // desc
+  const desc = document.createElement('div'); desc.className='game-desc'; desc.textContent='Fetching...';
+  // meta
   const meta = document.createElement('div'); meta.className='game-meta';
-  const visitsSpan = document.createElement('div'); visitsSpan.className='meta-pill'; visitsSpan.textContent='Visits: loading...';
+  const visitsSpan = document.createElement('div'); visitsSpan.className='meta-pill'; visitsSpan.textContent='Visits: —';
   const lastSpan = document.createElement('div'); lastSpan.className='meta-pill'; lastSpan.innerHTML = `Last Updated: <strong id="last-${placeId}">—</strong>`;
   meta.appendChild(visitsSpan); meta.appendChild(lastSpan);
-  container.appendChild(meta);
-
+  // actions
   const actions = document.createElement('div'); actions.className='game-actions';
-  const playBtn = document.createElement('a'); playBtn.className='btn'; playBtn.textContent='Play'; playBtn.target='_blank';
-  actions.appendChild(playBtn);
+  const play = document.createElement('a'); play.className='btn play-btn'; play.textContent='Play'; play.target='_blank'; play.href = p.url;
+  // assemble
+  root.appendChild(thumb); root.appendChild(title); root.appendChild(desc); root.appendChild(meta); actions.appendChild(play); root.appendChild(actions);
 
-  // first attempt to fetch universe/info/icon
-  let universeId = await fetchUniverseForPlace(placeId);
+  // attempt to fetch data
+  const universeId = await fetchUniverseForPlace(placeId);
   let info = universeId ? await fetchGameInfo(universeId) : null;
-  let iconUrl = universeId ? await loadThumbnailWithRetry(universeId) : null;
-
-  // fallback: if fetch failed, use LOCAL_GAME_META
-  const strPlace = String(placeId);
-  const fallback = LOCAL_GAME_META[strPlace] || { name:`Place ${placeId}`, description:'No description available.' };
-
-  const title = info?.name || fallback.name;
-  const desc = info?.description || fallback.description;
-  const visits = info?.visits ? info.visits.toLocaleString() : null;
-  const rootPlace = info?.rootPlaceId || placeId;
-
-  titleEl.textContent = title;
-  descEl.textContent = desc;
-  playBtn.href = `https://www.roblox.com/games/${rootPlace}`;
-
-  // thumbnail set or fallback
-  if(iconUrl) thumb.src = iconUrl;
-  else thumb.src = FALLBACK_THUMB;
-  thumb.onerror = ()=>{ thumb.src = FALLBACK_THUMB; };
-
-  // show visits: prefer live visits, otherwise saved meta editable value
-  const metaObj = loadGamesMeta();
-  if(visits){ visitsSpan.textContent = `Visits: ${visits}`; } 
-  else {
-    const savedVisits = (metaObj[placeId] && metaObj[placeId].visits) || 'N/A';
-    visitsSpan.textContent = `Visits: ${savedVisits}`;
+  let icon = universeId ? await fetchIcon(universeId) : null;
+  if(info){
+    title.textContent = info.name || (LOCAL_META[String(placeId)]?.name || `Place ${placeId}`);
+    desc.textContent = info.description || (LOCAL_META[String(placeId)]?.description || 'No description available.');
+    visitsSpan.textContent = `Visits: ${info.visits ? info.visits.toLocaleString() : 'N/A'}`;
+    if(info.rootPlaceId) play.href = `https://www.roblox.com/games/${info.rootPlaceId}`;
+  } else {
+    // fallback to local meta
+    const lm = LOCAL_META[String(placeId)] || { name:`Place ${placeId}`, description:'No description available.' };
+    title.textContent = lm.name; desc.textContent = lm.description;
+    const gm = loadGamesMeta();
+    visitsSpan.textContent = `Visits: ${gm[placeId]?.visits || 'N/A'}`;
+    lastSpan.querySelector('strong').innerText = gm[placeId]?.lastUpdated || '—';
   }
+  if(icon) thumb.src = icon;
+  thumb.onerror = ()=>{ thumb.src = thumb.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="512" height="300"><rect width="100%" height="100%" fill="#081021"/><text x="50%" y="50%" fill="#3aa8ff" font-size="20" text-anchor="middle" dominant-baseline="middle">BloxGlobe</text></svg>`); };
 
-  // last updated: show saved or dash
-  const lastVal = (metaObj[placeId] && metaObj[placeId].lastUpdated) || '—';
-  lastSpan.querySelector('strong').innerText = lastVal;
-
-  // admin editing for visits/lastUpdated
+  // admin edits for visits/last
   if(isEditMode()){
-    const editVisits = document.createElement('button'); editVisits.className='edit-btn'; editVisits.innerText='Edit Visits';
-    editVisits.addEventListener('click', ()=>{
-      const nv = prompt('Enter visits count (numbers only):', (metaObj[placeId] && metaObj[placeId].visits) || '');
-      if(nv !== null){ metaObj[placeId] = metaObj[placeId]||{}; metaObj[placeId].visits = nv; saveGamesMeta(metaObj); visitsSpan.textContent = `Visits: ${nv}`; }
-    });
-    const editLast = document.createElement('button'); editLast.className='edit-btn'; editLast.innerText='Edit Last Updated';
-    editLast.addEventListener('click', ()=>{
-      const nv = prompt('Set Last Updated (e.g. Oct 21, 2025):', lastSpan.querySelector('strong').innerText);
-      if(nv !== null){ metaObj[placeId] = metaObj[placeId]||{}; metaObj[placeId].lastUpdated = nv; saveGamesMeta(metaObj); lastSpan.querySelector('strong').innerText = nv; }
-    });
-    actions.appendChild(editVisits); actions.appendChild(editLast);
+    const ev = document.createElement('button'); ev.className='edit-btn'; ev.innerText='Edit Visits';
+    ev.addEventListener('click', ()=>{ const gm = loadGamesMeta(); const nv = prompt('Visits (numbers)', gm[placeId]?.visits || ''); if(nv!==null){ gm[placeId] = gm[placeId]||{}; gm[placeId].visits = nv; saveGamesMeta(gm); visitsSpan.textContent = `Visits: ${nv}`; }});
+    const elast = document.createElement('button'); elast.className='edit-btn'; elast.innerText='Edit Last';
+    elast.addEventListener('click', ()=>{ const gm = loadGamesMeta(); const nv = prompt('Last Updated (e.g. Oct 21, 2025)', gm[placeId]?.lastUpdated || ''); if(nv!==null){ gm[placeId] = gm[placeId]||{}; gm[placeId].lastUpdated = nv; saveGamesMeta(gm); lastSpan.querySelector('strong').innerText = nv; }});
+    actions.insertBefore(ev, play); actions.insertBefore(elast, play);
   }
 
-  actions.appendChild(playBtn);
-  container.appendChild(actions);
-  return container;
+  return root;
 }
 
-/* ---------- Render games (two only) ---------- */
+/* ---------- render games (only two + single coming soon) ---------- */
 async function renderGames(){
-  const list = document.getElementById('gameList'); list.innerHTML='';
-  for(const pid of GAME_PLACE_IDS){
+  const list = el('gameList'); list.innerHTML = '';
+  for(const g of GAMES){
     const placeholder = document.createElement('div'); placeholder.className='game-card'; placeholder.innerHTML = '<div class="game-title">Loading...</div>';
     list.appendChild(placeholder);
     try {
-      const card = await createGameCard(pid);
+      const card = await createGameCard(g);
       list.replaceChild(card, placeholder);
     } catch(e){
       console.error('game render error', e);
     }
   }
-  // single "More projects coming soon" card (only one)
-  const cs = document.createElement('div'); cs.className='game-card coming-soon';
-  cs.innerHTML = `<div><strong>More projects coming soon...</strong><div style="color:var(--muted);margin-top:8px">Stay tuned for upcoming BloxGlobe projects.</div></div>`;
+  const cs = document.createElement('div'); cs.className='game-card';
+  cs.innerHTML = `<h3>More Projects Coming Soon...</h3><p>Stay tuned for upcoming BloxGlobe projects.</p>`;
   list.appendChild(cs);
 }
 
-/* ---------- Developer info ---------- */
-async function loadDevInfo(){ try{ const r = await fetch(`https://users.roblox.com/v1/users/${DEV_USER_ID}`); const j = await r.json(); const display = j.displayName || j.name || '@blox_fruits20307'; el('devName').innerText = display; el('robloxProfile').href = `https://www.roblox.com/users/${DEV_USER_ID}/profile`; const a = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${DEV_USER_ID}&size=150x150&format=Png&isCircular=false`); const ai = await a.json(); if(ai?.data?.[0]?.imageUrl) el('devAvatar').src = ai.data[0].imageUrl; }catch(e){ console.error('dev info error', e); }}
-
-/* ---------- Overlay / auto-refresh ---------- */
-const overlay = el('overlay');
-function showOverlay(){ overlay.style.display='flex'; }
-function hideOverlay(){ overlay.style.display='none'; }
-async function autoRefreshCheck(){ // simulate a lightweight check and show overlay for 3 sec then refresh data (not full page reload)
-  showOverlay();
-  // small delay so users see overlay
-  await new Promise(r => setTimeout(r, 1200));
-  await checkRobloxStatus(); // refresh status
-  await renderGames(); // refresh games data (live fetch attempt)
-  hideOverlay();
-  // small success toast
-  const t = document.createElement('div'); t.style.position='fixed'; t.style.left='50%'; t.style.transform='translateX(-50%)'; t.style.bottom='18px'; t.style.background='rgba(0,0,0,0.7)'; t.style.color='#fff'; t.style.padding='8px 12px'; t.style.borderRadius='8px'; t.style.zIndex=9999; t.innerText='✅ Site refreshed successfully';
-  document.body.appendChild(t);
-  setTimeout(()=>t.remove(), 2500);
+/* ---------- developer info ---------- */
+async function loadDevInfo(){
+  try{
+    const r = await fetch(`https://users.roblox.com/v1/users/${DEV_USER_ID}`);
+    const j = await r.json();
+    const display = j.displayName || j.name || '@blox_fruits20307';
+    el('devName').innerText = display;
+    el('robloxProfile').href = `https://www.roblox.com/users/${DEV_USER_ID}/profile`;
+    const a = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${DEV_USER_ID}&size=150x150&format=Png&isCircular=false`);
+    const ai = await a.json();
+    if(ai?.data?.[0]?.imageUrl) el('devAvatar').src = ai.data[0].imageUrl;
+  }catch(e){ console.warn('dev info', e); }
 }
-// start auto refresh interval (every 5 minutes)
-setInterval(autoRefreshCheck, 5 * 60 * 1000);
 
-/* ---------- Initialization ---------- */
-function renderAll(){ renderUpdates(); renderGames(); loadDevInfo(); loadSettings(); checkRobloxStatus(); renderMediaPlayer(); }
+/* ---------- overlay / manual reload ---------- */
+const overlay = el('overlay');
+function showOverlay(durationMs = 5*60*1000){ // default 5 minutes
+  if(!overlay) return;
+  overlay.style.display = 'flex';
+  // auto-hide after durationMs
+  clearTimeout(overlay._hideTimer);
+  overlay._hideTimer = setTimeout(()=>{ overlay.style.display='none'; }, durationMs);
+}
+function hideOverlay(){ if(!overlay) return; overlay.style.display='none'; clearTimeout(overlay._hideTimer); }
+
+/* add a "Reload Site" manual button in header (optional) */
+(function addReloadButton(){
+  const btn = document.createElement('button'); btn.className='btn secondary'; btn.style.marginLeft='12px'; btn.innerText='Reload Site';
+  btn.addEventListener('click', async ()=>{ showOverlay(5*60*1000); // show for 5 minutes
+    await checkRobloxStatus();
+    await renderGames();
+    await renderUpdates();
+    await loadDevInfo();
+    // keep overlay until auto-hide
+  });
+  document.querySelector('header nav').appendChild(btn);
+})();
+
+/* ---------- particles (snow + fire) ---------- */
+function spawnParticles(){
+  const layer = el('particles');
+  const totalSnow = 25;
+  const totalFire = 20;
+  // remove old
+  layer.innerHTML='';
+  for(let i=0;i<totalSnow;i++){
+    const d = document.createElement('div'); d.className='p snow'; d.textContent='❅';
+    const size = Math.random()*10+10; d.style.fontSize = size + 'px';
+    d.style.left = Math.random()*100 + 'vw';
+    const dur = Math.random()*6 + 6;
+    d.style.animation = `fallDown ${dur}s linear ${Math.random()*-dur}s infinite`;
+    layer.appendChild(d);
+  }
+  for(let i=0;i<totalFire;i++){
+    const f = document.createElement('div'); f.className='p fire'; f.textContent='🔥';
+    const size = Math.random()*8+12; f.style.fontSize = size + 'px';
+    f.style.left = Math.random()*100 + 'vw';
+    const dur = Math.random()*5 + 5;
+    f.style.animation = `fallDown ${dur}s linear ${Math.random()*-dur}s infinite`;
+    layer.appendChild(f);
+  }
+}
+spawnParticles();
+
+/* ---------- initialization ---------- */
+async function renderAll(){
+  renderUpdates();
+  await renderGames();
+  await loadDevInfo();
+  loadSettings();
+  renderMediaPlayer();
+  checkRobloxStatus(); // start status checking
+}
 renderAll();
 
-/* ---------- small UI wiring ---------- */
-document.getElementById('modalBackdrop').addEventListener('click',(ev)=>{ if(ev.target===ev.currentTarget){ ev.currentTarget.style.display='none'; ev.currentTarget.setAttribute('aria-hidden','true'); }});
-el('settingsBtn').addEventListener('click', ()=>{ el('modalBackdrop').style.display='flex'; el('modalBackdrop').setAttribute('aria-hidden','false'); loadSettings(); });
-el('closeSettings').addEventListener('click', ()=>{ el('modalBackdrop').style.display='none'; el('modalBackdrop').setAttribute('aria-hidden','true'); });
+/* ---------- Settings modal wiring ---------- */
+const modal = el('modalBackdrop');
+el('settingsBtn').addEventListener('click', ()=>{ modal.style.display='flex'; modal.setAttribute('aria-hidden','false'); loadSettings(); });
+el('closeSettings').addEventListener('click', ()=>{ modal.style.display='none'; modal.setAttribute('aria-hidden','true'); });
 
-function loadSettings(){ const cfg = JSON.parse(localStorage.getItem(STORAGE.MEDIA) || 'null'); if(cfg){ el('mediaType').value = cfg.type; el('mediaInput').value = cfg.value;} else { el('mediaType').value='none'; el('mediaInput').value=''; } renderMediaPlayer(); }
+function loadSettings(){
+  const cfg = JSON.parse(localStorage.getItem(STORAGE.MEDIA) || 'null');
+  if(cfg){ el('mediaType').value = cfg.type; el('mediaInput').value = cfg.value; el('toggleRepeat').innerText = `Repeat: ${cfg.repeat ? 'On':'Off'}`; } else { el('mediaType').value='none'; el('mediaInput').value=''; el('toggleRepeat').innerText = 'Repeat: Off'; }
+}
 
-/* ---------- Roblox status initial check every minute when down, otherwise every 1 minutes ---------- */
-checkRobloxStatus();
-setInterval(()=>{ checkRobloxStatus(); }, 60 * 1000); // keep frequent checks for status (1 min) — it will toggle play state
+/* ---------- Roblox status scheduling (initial timers) ---------- */
+// initial check and schedule done inside checkRobloxStatus (it sets interval appropriately)
 
-/* ---------- helper escape ---------- */
+/* ---------- click outside modal closes ---------- */
+document.getElementById('modalBackdrop').addEventListener('click', (ev)=>{ if(ev.target === ev.currentTarget){ ev.currentTarget.style.display='none'; ev.currentTarget.setAttribute('aria-hidden','true'); } });
+
+/* ---------- small helpers for overlay element ---------- */
+(function createOverlayElement(){
+  const ov = document.createElement('div'); ov.className='overlay'; ov.id='overlay'; ov.style.display='none';
+  ov.innerHTML = `<div class="spinner"></div><div style="margin-top:12px;color:white">Updating website…</div>`;
+  document.body.appendChild(ov);
+})();
+
+/* ---------- initial updates seed if none ---------- */
+if(!localStorage.getItem(STORAGE.UPDATES)){
+  const seed = [{date: new Date().toLocaleDateString(), text:'Site launched — BloxGlobe Studios official site is live!', source:'manual'}];
+  localStorage.setItem(STORAGE.UPDATES, JSON.stringify(seed));
+}
+
+/* ---------- start periodic auto-refresh of site data (every 5 minutes) ---------- */
+setInterval(async ()=>{
+  showOverlay(5*60*1000); // show overlay for up to 5 minutes while updating
+  await checkRobloxStatus();
+  await renderGames();
+  await renderUpdates();
+  await loadDevInfo();
+  // overlay will auto-hide after 5 minutes or can be hidden earlier if desired
+}, 5*60*1000);
+
+/* ---------- ensure status check code is defined earlier - duplicate safe ---------- */
+(async function startStatusLoop(){
+  await checkRobloxStatus(); // initial
+  // checkRobloxStatus sets its own interval (statusTimer)
+})();
+
+/* ---------- helper escape (redeclare safe) ---------- */
 function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 </script>
 </body>
 </html>
-
