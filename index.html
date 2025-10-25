@@ -13,6 +13,45 @@
       overflow-x: hidden;
     }
 
+    /* --- LOADING SCREEN --- */
+    #loading {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 3000;
+      animation: fadeOut 2s ease 8s forwards;
+    }
+
+    #loading img {
+      width: 120px;
+      animation: pumpkin 1.5s infinite ease-in-out;
+    }
+
+    @keyframes pumpkin {
+      0%,100% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.1) rotate(10deg); }
+    }
+
+    #loading h1 {
+      color: orange;
+      font-size: 24px;
+      margin-top: 15px;
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0.6; }
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
     header {
       display: flex;
       justify-content: space-between;
@@ -25,59 +64,31 @@
       z-index: 100;
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo img { width: 45px; height: 45px; }
+
+    .nav-links { display: flex; align-items: center; gap: 20px; }
+    .nav-links a, button {
+      color: #fff; text-decoration: none; background: none; border: none;
+      cursor: pointer; font-size: 15px; transition: all 0.3s ease;
     }
 
-    .logo img {
-      width: 45px;
-      height: 45px;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .nav-links a,
-    button {
-      color: #fff;
-      text-decoration: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 15px;
-      transition: all 0.3s ease;
-    }
-
-    .nav-links a:hover,
-    button:hover {
-      color: #00c8ff;
-      transform: scale(1.05);
-    }
+    .nav-links a:hover, button:hover { color: #00c8ff; transform: scale(1.05); }
 
     #feedbackBtn {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: #b0b0b0;
-      font-weight: 500;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 8px;
-      padding: 6px 12px;
+      display: flex; align-items: center; gap: 6px;
+      color: #b0b0b0; font-weight: 500;
+      background: rgba(255,255,255,0.05);
+      border-radius: 8px; padding: 6px 12px;
       transition: all 0.3s ease;
     }
 
     #feedbackBtn:hover {
       color: #00c8ff;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255,255,255,0.1);
       transform: scale(1.05);
     }
 
-    /* GAME CARDS GRID */
     #games {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -87,171 +98,100 @@
     }
 
     .game-card {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255,255,255,0.05);
       border-radius: 20px;
       padding: 20px;
       text-align: center;
       transition: all 0.3s ease;
       width: 100%;
       max-width: 400px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
-    .game-card:hover {
-      transform: scale(1.03);
-      background: rgba(255, 255, 255, 0.1);
-    }
+    .game-card:hover { transform: scale(1.03); background: rgba(255,255,255,0.1); }
+    .game-card img { width: 100%; border-radius: 12px; margin-bottom: 10px; }
 
     .play-btn {
       margin-top: 10px;
-      background: #00c8ff;
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      transition: background 0.3s;
+      background: #00c8ff; color: #fff;
+      padding: 10px 20px; border-radius: 8px; border: none;
+      cursor: pointer; transition: background 0.3s;
     }
 
-    .play-btn:hover {
-      background: #008ec4;
-    }
+    .play-btn:hover { background: #008ec4; }
 
-    /* UPDATE LOG */
     .update-log {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255,255,255,0.05);
       border-radius: 15px;
       margin: 30px 60px;
       padding: 20px;
-      position: relative;
     }
 
     .edit-btn {
       background: #00c8ff;
-      border: none;
-      color: white;
-      padding: 5px 15px;
-      border-radius: 6px;
-      cursor: pointer;
-      float: right;
+      border: none; color: white;
+      padding: 5px 15px; border-radius: 6px;
+      cursor: pointer; float: right;
     }
 
-    .edit-btn:hover {
-      background: #009edb;
-    }
+    .edit-btn:hover { background: #009edb; }
 
-    /* OVERLAY */
     .overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
+      display: none; position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
       backdrop-filter: blur(8px);
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      color: #fff;
-      font-size: 20px;
-      z-index: 2000;
+      justify-content: center; align-items: center; flex-direction: column;
+      color: #fff; font-size: 20px; z-index: 2000;
     }
 
     .spinner {
-      border: 5px solid rgba(255, 255, 255, 0.2);
+      border: 5px solid rgba(255,255,255,0.2);
       border-top: 5px solid #00c8ff;
       border-radius: 50%;
-      width: 50px;
-      height: 50px;
+      width: 50px; height: 50px;
       animation: spin 1s linear infinite;
       margin-bottom: 10px;
     }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
 
-    @keyframes spin {
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    /* Feedback Modal */
     .feedback-modal {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(20, 20, 20, 0.95);
-      border-radius: 15px;
-      padding: 25px;
-      z-index: 3000;
-      width: 320px;
-      text-align: center;
+      display: none; position: fixed;
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: rgba(20,20,20,0.95);
+      border-radius: 15px; padding: 25px;
+      z-index: 3000; width: 320px; text-align: center;
     }
 
     .feedback-modal textarea {
-      width: 100%;
-      height: 80px;
-      border-radius: 8px;
-      border: none;
-      padding: 8px;
-      resize: none;
-      margin-bottom: 10px;
+      width: 100%; height: 80px;
+      border-radius: 8px; border: none;
+      padding: 8px; resize: none; margin-bottom: 10px;
     }
 
     .feedback-modal button {
-      background: #00c8ff;
-      color: #fff;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 8px;
-      cursor: pointer;
+      background: #00c8ff; color: #fff;
+      border: none; padding: 8px 15px;
+      border-radius: 8px; cursor: pointer;
     }
 
-    /* FOOTER */
     footer {
-      text-align: center;
-      padding: 25px;
-      margin-top: 50px;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(6px);
-      font-size: 14px;
-      color: #b0b0b0;
+      text-align: center; padding: 25px; margin-top: 50px;
+      background: rgba(0,0,0,0.4); backdrop-filter: blur(6px);
+      font-size: 14px; color: #b0b0b0;
     }
-
-    footer a {
-      color: #00c8ff;
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
-
-    /* PARTICLES */
-    @keyframes fall {
-      0% {
-        transform: translateY(-10px) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0;
-      }
-    }
-
-    .particle {
-      position: fixed;
-      top: 0;
-      font-size: 14px;
-      animation: fall linear infinite;
-      color: #fff;
-      pointer-events: none;
-      z-index: 1;
-    }
+    footer a { color: #00c8ff; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
   </style>
 </head>
 
 <body>
+  <!-- Loading Screen -->
+  <div id="loading">
+    <img src="https://static.vecteezy.com/system/resources/thumbnails/018/867/786/small/halloween-pumpkin-face-free-png.png" alt="pumpkin">
+    <h1>🎃 Happy Halloween from BloxGlobe Studio™</h1>
+  </div>
+
   <header>
     <div class="logo">
       <img src="YOUR_ROBLOX_LOGO.png" alt="Roblox Logo" />
@@ -264,22 +204,20 @@
     </div>
   </header>
 
-  <!-- Games Section -->
   <section id="games">
-    <div class="game-card">
+    <div class="game-card" data-id="135869717619701">
       <h3>ReadyNode [Beta]</h3>
       <p>Explore the early build of ReadyNode!</p>
       <button class="play-btn" onclick="window.open('https://www.roblox.com/games/135869717619701/Beta', '_blank')">Play</button>
     </div>
 
-    <div class="game-card">
+    <div class="game-card" data-id="85250100428738">
       <h3>R25</h3>
       <p>R25 is your new way to play and build!</p>
       <button class="play-btn" onclick="window.open('https://www.roblox.com/games/85250100428738/R25', '_blank')">Play</button>
     </div>
   </section>
 
-  <!-- Update Log -->
   <section class="update-log">
     <h3>Update Log</h3>
     <button class="edit-btn" onclick="enableEdit()">Edit</button>
@@ -290,13 +228,11 @@
     </div>
   </section>
 
-  <!-- Overlay -->
   <div class="overlay" id="updateOverlay">
     <div class="spinner"></div>
     <p>Updating website...</p>
   </div>
 
-  <!-- Feedback Modal -->
   <div class="feedback-modal" id="feedbackModal">
     <h3>Send Feedback</h3>
     <textarea id="feedbackText" placeholder="Describe the issue..."></textarea>
@@ -306,75 +242,83 @@
     </div>
   </div>
 
-  <!-- Footer -->
   <footer>
     Founder & Developer: <a href="#">Abel</a><br />
     © 2025 BloxGlobe Studio™. All rights reserved.
   </footer>
 
   <script>
-    // --- Admin Edit ---
+    // Admin Edit Protection
     function enableEdit() {
       const phrase = prompt("Enter Admin Phrase:");
       if (phrase === "SpotifyLover.To") {
         const log = document.getElementById("logContent");
         log.contentEditable = true;
         log.focus();
-        alert("Edit mode enabled. Save changes manually after editing.");
+        alert("Edit mode enabled. Remember to save changes!");
       } else {
         alert("Access denied.");
       }
     }
 
-    // --- Feedback ---
+    // Feedback Modal
     const modal = document.getElementById("feedbackModal");
     document.getElementById("feedbackBtn").onclick = () =>
       (modal.style.display = "block");
 
-    function closeFeedback() {
-      modal.style.display = "none";
-    }
+    function closeFeedback() { modal.style.display = "none"; }
 
     function sendFeedback() {
       const text = document.getElementById("feedbackText").value;
-      if (!text.trim()) return alert("Please describe your issue first!");
-      const githubURL = `https://github.com/BloxGlobe/BloxGlobe-Studio--Website/issues/new?title=Feedback&body=${encodeURIComponent(
-        text
-      )}`;
+      if (!text.trim()) return alert("Please describe your issue!");
+      const githubURL = `https://github.com/BloxGlobe/BloxGlobe-Studio--Website/issues/new?title=Feedback&body=${encodeURIComponent(text)}`;
       window.open(githubURL, "_blank");
       closeFeedback();
     }
 
-    // --- Update Detector ---
-    let lastVersion = localStorage.getItem("bloxglobeVersion") || "1.5.2";
-    fetch("version.json?" + new Date().getTime())
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.version !== lastVersion) {
-          const overlay = document.getElementById("updateOverlay");
-          overlay.style.display = "flex";
+    // Update Overlay 20s
+    fetch("version.json?" + Date.now())
+      .then(r => r.json())
+      .then(d => {
+        const v = localStorage.getItem("bloxglobeVersion") || "1.5.2";
+        if (d.version !== v) {
+          const o = document.getElementById("updateOverlay");
+          o.style.display = "flex";
           setTimeout(() => {
-            overlay.style.display = "none";
-            localStorage.setItem("bloxglobeVersion", data.version);
+            o.style.display = "none";
+            localStorage.setItem("bloxglobeVersion", d.version);
           }, 20000);
         }
-      })
-      .catch(() => {});
+      }).catch(() => {});
 
-    // --- Particles ---
-    function spawnParticle(icon, duration) {
-      const el = document.createElement("div");
-      el.className = "particle";
-      el.textContent = icon;
-      el.style.left = Math.random() * 100 + "vw";
-      el.style.animationDuration = duration + "s";
-      document.body.appendChild(el);
-      setTimeout(() => el.remove(), duration * 1000);
+    // Roblox API Integration
+    async function loadGameInfo(universeId, card) {
+      try {
+        const [gameInfoRes, thumbRes, votesRes] = await Promise.all([
+          fetch(`https://games.roblox.com/v1/games?universeIds=${universeId}`),
+          fetch(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=512x512&format=Png`),
+          fetch(`https://games.roblox.com/v1/games/votes?universeIds=${universeId}`)
+        ]);
+
+        const game = (await gameInfoRes.json()).data[0];
+        const thumb = (await thumbRes.json()).data[0]?.imageUrl;
+        const votes = (await votesRes.json()).data[0];
+
+        const img = document.createElement("img");
+        img.src = thumb; img.alt = game.name;
+        const stats = document.createElement("div");
+        stats.innerHTML = `
+          <p>👀 ${game.visits.toLocaleString()} visits</p>
+          <p>🧍 ${game.playing.toLocaleString()} playing</p>
+          <p>👍 ${votes.upVotes.toLocaleString()} | 👎 ${votes.downVotes.toLocaleString()}</p>
+        `;
+        card.prepend(img);
+        card.appendChild(stats);
+      } catch (err) {
+        console.error("Roblox API error:", err);
+      }
     }
-
-    setInterval(() => spawnParticle("❄️", 8 + Math.random() * 3), 300);
-    setInterval(() => spawnParticle("💔", 10 + Math.random() * 5), 600);
-    setInterval(() => spawnParticle("🔥", 10 + Math.random() * 5), 600);
-    </script>
+    document.querySelectorAll(".game-card").forEach(c => loadGameInfo(c.dataset.id, c));
+  </script>
 </body>
 </html>
