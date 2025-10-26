@@ -208,24 +208,20 @@
     <div class="game-card" data-id="135869717619701">
       <h3>ReadyNode [Beta]</h3>
       <p>Explore the early build of ReadyNode!</p>
-      <a class="play-btn" href="https://www.roblox.com/games/135869717619701/Beta" target="_blank" rel="noopener noreferrer" aria-label="Play ReadyNode (opens in new tab)">Play</a>
+      <button class="play-btn" onclick="window.open('https://www.roblox.com/games/135869717619701/Beta', '_blank')">Play</button>
     </div>
 
     <div class="game-card" data-id="85250100428738">
       <h3>R25</h3>
       <p>R25 is your new way to play and build!</p>
-      <a class="play-btn" href="https://www.roblox.com/games/85250100428738/R25" target="_blank" rel="noopener noreferrer" aria-label="Play R25 (opens in new tab)">Play</a>
+      <button class="play-btn" onclick="window.open('https://www.roblox.com/games/85250100428738/R25', '_blank')">Play</button>
     </div>
   </section>
 
   <section class="update-log">
     <h3>Update Log</h3>
-    <div style="float: right;">
-      <button class="edit-btn" id="editBtn" aria-label="Enable edit">Edit</button>
-      <button class="edit-btn" id="saveBtn" style="display: none;" aria-label="Save changes">Save</button>
-      <button class="edit-btn" id="cancelBtn" style="display: none;" aria-label="Cancel editing">Cancel</button>
-    </div>
-    <div id="logContent" contenteditable="false" aria-live="polite">
+    <button class="edit-btn" onclick="enableEdit()">Edit</button>
+    <div id="logContent" contenteditable="false">
       <p>🔥 Update 1.5.4 - Fixed UI stretching & layout issues.</p>
       <p>💬 Added Feedback system for reports & feature requests.</p>
       <p>🧠 Improved performance and design polish.</p>
@@ -247,58 +243,23 @@
   </div>
 
   <footer>
-  <script>
-    // Admin Edit Protection & Edit workflow
-    const ADMIN_PHRASE = "SpotifyLover.To";
-    const logEl = document.getElementById("logContent");
-    const editBtn = document.getElementById("editBtn");
-    const saveBtn = document.getElementById("saveBtn");
-    const cancelBtn = document.getElementById("cancelBtn");
-    const LOG_KEY = "bloxglobe_update_log_html";
+    Founder & Developer: <a href="#">Abel</a><br />
+    © 2025 BloxGlobe Studio™. All rights reserved.
+  </footer>
 
+  <script>
+    // Admin Edit Protection
     function enableEdit() {
       const phrase = prompt("Enter Admin Phrase:");
-      if (phrase === ADMIN_PHRASE) {
-        logEl.contentEditable = "true";
-        logEl.focus();
-        toggleEditControls(true);
+      if (phrase === "SpotifyLover.To") {
+        const log = document.getElementById("logContent");
+        log.contentEditable = true;
+        log.focus();
         alert("Edit mode enabled. Remember to save changes!");
       } else {
         alert("Access denied.");
       }
     }
-
-    function saveEdit() {
-      logEl.contentEditable = "false";
-      toggleEditControls(false);
-      localStorage.setItem(LOG_KEY, logEl.innerHTML);
-      alert("Update log saved locally.");
-    }
-
-    function cancelEdit() {
-      // revert content from storage (or initial content if none)
-      const saved = localStorage.getItem(LOG_KEY);
-      if (saved !== null) logEl.innerHTML = saved;
-      logEl.contentEditable = "false";
-      toggleEditControls(false);
-    }
-
-    function toggleEditControls(editing) {
-      editBtn.style.display = editing ? "none" : "inline-block";
-      saveBtn.style.display = editing ? "inline-block" : "none";
-      cancelBtn.style.display = editing ? "inline-block" : "none";
-    }
-
-    // wire up buttons and load stored log on page load
-    document.addEventListener("DOMContentLoaded", () => {
-      // load saved log if present
-      const saved = localStorage.getItem(LOG_KEY);
-      if (saved !== null) logEl.innerHTML = saved;
-
-      editBtn.addEventListener("click", enableEdit);
-      saveBtn.addEventListener("click", saveEdit);
-      cancelBtn.addEventListener("click", cancelEdit);
-    });
 
     // Feedback Modal
     const modal = document.getElementById("feedbackModal");
@@ -331,61 +292,52 @@
       }).catch(() => {});
 
     // Roblox API Integration
-    async function fetchJson(url) {
-      try {
-        const res = await fetch(url);
-        if (!res.ok) {
-          console.warn("Request failed:", url, res.status);
-          return null;
-        }
-        return await res.json();
-      } catch (e) {
-        console.warn("Fetch error:", url, e);
-        return null;
-      }
-    }
-
     async function loadGameInfo(universeId, card) {
       try {
-        const [gameInfoJson, thumbJson, votesJson] = await Promise.all([
-          fetchJson(`https://games.roblox.com/v1/games?universeIds=${universeId}`),
-          fetchJson(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=512x512&format=Png`),
-          fetchJson(`https://games.roblox.com/v1/games/votes?universeIds=${universeId}`)
+        const [gameInfoRes, thumbRes, votesRes] = await Promise.all([
+          fetch(`https://games.roblox.com/v1/games?universeIds=${universeId}`),
+          fetch(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=512x512&format=Png`),
+          fetch(`https://games.roblox.com/v1/games/votes?universeIds=${universeId}`)
         ]);
 
-        const game = gameInfoJson?.data?.[0];
-        const thumb = thumbJson?.data?.[0]?.imageUrl || "";
-        const votes = votesJson?.data?.[0] || {};
+        const gameInfoJson = await gameInfoRes.json().catch(() => ({}));
+        const thumbJson = await thumbRes.json().catch(() => ({}));
+        const votesJson = await votesRes.json().catch(() => ({}));
 
-        if (!game) {
-          card.querySelector("h3")?.insertAdjacentHTML("afterend", '<p style="color:#f88;">Unable to load game info</p>');
+        const game = gameInfoJson?.data?.[0];
+        const thumb = thumbJson?.data?.[0]?.imageUrl;
+        const votes = votesJson?.data?.[0];
+
+        if (!game && !thumb && !votes) {
+          console.warn("No Roblox data for universeId:", universeId);
           return;
         }
 
         const img = document.createElement("img");
-        img.src = thumb || "https://via.placeholder.com/512x256?text=No+Image";
-        img.alt = game.name || "Game image";
+        img.src = thumb || "https://via.placeholder.com/512x512.png?text=No+Image";
+        img.alt = (game && game.name) ? game.name : "Game Image";
 
         const stats = document.createElement("div");
-        const visits = Number(game.visits || 0).toLocaleString();
-        const playing = Number(game.playing || 0).toLocaleString();
-        const up = Number(votes.upVotes || 0).toLocaleString();
-        const down = Number(votes.downVotes || 0).toLocaleString();
+
+        const visits = Number(game?.visits ?? game?.visitCount ?? 0);
+        const playing = Number(game?.playing ?? game?.playingCount ?? game?.playerCount ?? 0);
+        const upVotes = Number(votes?.upVotes ?? votes?.upvoteCount ?? 0);
+        const downVotes = Number(votes?.downVotes ?? votes?.downVoteCount ?? votes?.downVotesCount ?? 0);
 
         stats.innerHTML = `
-          <p>👀 ${visits} visits</p>
-          <p>🧍 ${playing} playing</p>
-          <p>👍 ${up} | 👎 ${down}</p>
+          <p>👀 ${visits.toLocaleString()} visits</p>
+          <p>🧍 ${playing.toLocaleString()} playing</p>
+          <p>👍 ${upVotes.toLocaleString()} | 👎 ${downVotes.toLocaleString()}</p>
         `;
+
+        // replace existing image if present
+        const existingImg = card.querySelector("img");
+        if (existingImg) existingImg.remove();
+
         card.prepend(img);
         card.appendChild(stats);
       } catch (err) {
         console.error("Roblox API error:", err);
-        card.querySelector("h3")?.insertAdjacentHTML("afterend", '<p style="color:#f88;">Error loading game info</p>');
-      }
-    }
-    document.querySelectorAll(".game-card").forEach(c => loadGameInfo(c.dataset.id, c));
-  </script>
       }
     }
     document.querySelectorAll(".game-card").forEach(c => loadGameInfo(c.dataset.id, c));
