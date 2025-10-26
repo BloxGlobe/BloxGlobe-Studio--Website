@@ -18,7 +18,7 @@
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: black;
+      background: #000;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -28,7 +28,7 @@
     }
 
     #loading img {
-      width: 120px;
+      width: 130px;
       animation: pumpkin 1.5s infinite ease-in-out;
     }
 
@@ -39,7 +39,7 @@
 
     #loading h1 {
       color: orange;
-      font-size: 24px;
+      font-size: 26px;
       margin-top: 15px;
       animation: blink 2s infinite;
     }
@@ -75,20 +75,6 @@
 
     .nav-links a:hover, button:hover { color: #00c8ff; transform: scale(1.05); }
 
-    #feedbackBtn {
-      display: flex; align-items: center; gap: 6px;
-      color: #b0b0b0; font-weight: 500;
-      background: rgba(255,255,255,0.05);
-      border-radius: 8px; padding: 6px 12px;
-      transition: all 0.3s ease;
-    }
-
-    #feedbackBtn:hover {
-      color: #00c8ff;
-      background: rgba(255,255,255,0.1);
-      transform: scale(1.05);
-    }
-
     #games {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -106,6 +92,7 @@
       width: 100%;
       max-width: 400px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      position: relative;
     }
 
     .game-card:hover { transform: scale(1.03); background: rgba(255,255,255,0.1); }
@@ -120,59 +107,23 @@
 
     .play-btn:hover { background: #008ec4; }
 
+    .retry-btn {
+      background: #ff5252;
+      color: #fff;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: background 0.3s ease;
+    }
+    .retry-btn:hover { background: #ff7373; }
+
     .update-log {
       background: rgba(255,255,255,0.05);
       border-radius: 15px;
       margin: 30px 60px;
       padding: 20px;
-    }
-
-    .edit-btn {
-      background: #00c8ff;
-      border: none; color: white;
-      padding: 5px 15px; border-radius: 6px;
-      cursor: pointer; float: right;
-    }
-
-    .edit-btn:hover { background: #009edb; }
-
-    .overlay {
-      display: none; position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(8px);
-      justify-content: center; align-items: center; flex-direction: column;
-      color: #fff; font-size: 20px; z-index: 2000;
-    }
-
-    .spinner {
-      border: 5px solid rgba(255,255,255,0.2);
-      border-top: 5px solid #00c8ff;
-      border-radius: 50%;
-      width: 50px; height: 50px;
-      animation: spin 1s linear infinite;
-      margin-bottom: 10px;
-    }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-
-    .feedback-modal {
-      display: none; position: fixed;
-      top: 50%; left: 50%; transform: translate(-50%, -50%);
-      background: rgba(20,20,20,0.95);
-      border-radius: 15px; padding: 25px;
-      z-index: 3000; width: 320px; text-align: center;
-    }
-
-    .feedback-modal textarea {
-      width: 100%; height: 80px;
-      border-radius: 8px; border: none;
-      padding: 8px; resize: none; margin-bottom: 10px;
-    }
-
-    .feedback-modal button {
-      background: #00c8ff; color: #fff;
-      border: none; padding: 8px 15px;
-      border-radius: 8px; cursor: pointer;
     }
 
     footer {
@@ -200,7 +151,6 @@
     <div class="nav-links">
       <a href="https://www.roblox.com/users/5525937576/profile">View Roblox Profile</a>
       <a href="https://whatsapp.com/channel/0029VaAfKWq7BLtUakspqi1R">Follow Channel</a>
-      <button id="feedbackBtn">💬 Feedback</button>
     </div>
   </header>
 
@@ -220,27 +170,12 @@
 
   <section class="update-log">
     <h3>Update Log</h3>
-    <button class="edit-btn" onclick="enableEdit()">Edit</button>
-    <div id="logContent" contenteditable="false">
-      <p>🔥 Update 1.5.4 - Fixed UI stretching & layout issues.</p>
-      <p>💬 Added Feedback system for reports & feature requests.</p>
-      <p>🧠 Improved performance and design polish.</p>
+    <div id="logContent">
+      <p>🔥 Update 1.5.5 - Added safe fallbacks and improved API handling.</p>
+      <p>🎃 Added Halloween pumpkin animation.</p>
+      <p>🧠 Improved error safety and design polish.</p>
     </div>
   </section>
-
-  <div class="overlay" id="updateOverlay">
-    <div class="spinner"></div>
-    <p>Updating website...</p>
-  </div>
-
-  <div class="feedback-modal" id="feedbackModal">
-    <h3>Send Feedback</h3>
-    <textarea id="feedbackText" placeholder="Describe the issue..."></textarea>
-    <div>
-      <button onclick="sendFeedback()">Send Report</button>
-      <button onclick="closeFeedback()">Close</button>
-    </div>
-  </div>
 
   <footer>
     Founder & Developer: <a href="#">Abel</a>
@@ -248,98 +183,51 @@
   </footer>
 
   <script>
-    // Admin Edit Protection
-    function enableEdit() {
-      const phrase = prompt("Enter Admin Phrase:");
-      if (phrase === "SpotifyLover.To") {
-        const log = document.getElementById("logContent");
-        log.contentEditable = true;
-        log.focus();
-        alert("Edit mode enabled. Remember to save changes!");
-      } else {
-        alert("Access denied.");
-      }
-    }
+    async function loadGameInfo(universeId, card, retry = 0) {
+      const errorMsg = card.querySelector(".error-msg");
+      if (errorMsg) errorMsg.remove();
 
-    // Feedback Modal
-    const modal = document.getElementById("feedbackModal");
-    document.getElementById("feedbackBtn").onclick = () =>
-      (modal.style.display = "block");
-
-    function closeFeedback() { modal.style.display = "none"; }
-
-    function sendFeedback() {
-      const text = document.getElementById("feedbackText").value;
-      if (!text.trim()) return alert("Please describe your issue!");
-      const githubURL = `https://github.com/BloxGlobe/BloxGlobe-Studio--Website/issues/new?title=Feedback&body=${encodeURIComponent(text)}`;
-      window.open(githubURL, "_blank");
-      closeFeedback();
-    }
-
-    // Update Overlay 20s
-    fetch("version.json?" + Date.now())
-      .then(r => r.json())
-      .then(d => {
-        const v = localStorage.getItem("bloxglobeVersion") || "1.5.2";
-        if (d.version !== v) {
-          const o = document.getElementById("updateOverlay");
-          o.style.display = "flex";
-          setTimeout(() => {
-            o.style.display = "none";
-            localStorage.setItem("bloxglobeVersion", d.version);
-          }, 20000);
-        }
-      }).catch(() => {});
-
-    // Roblox API Integration
-    async function loadGameInfo(universeId, card) {
       try {
-        const [gameInfoRes, thumbRes, votesRes] = await Promise.all([
+        const [gameRes, thumbRes] = await Promise.all([
           fetch(`https://games.roblox.com/v1/games?universeIds=${universeId}`),
-          fetch(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=512x512&format=Png`),
-          fetch(`https://games.roblox.com/v1/games/votes?universeIds=${universeId}`)
+          fetch(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=512x512&format=Png`)
         ]);
 
-        const gameInfoJson = await gameInfoRes.json().catch(() => ({}));
-        const thumbJson = await thumbRes.json().catch(() => ({}));
-        const votesJson = await votesRes.json().catch(() => ({}));
+        if (!gameRes.ok || !thumbRes.ok) throw new Error("Bad response");
 
-        const game = gameInfoJson?.data?.[0];
-        const thumb = thumbJson?.data?.[0]?.imageUrl;
-        const votes = votesJson?.data?.[0];
+        const gameData = (await gameRes.json())?.data?.[0];
+        const thumbData = (await thumbRes.json())?.data?.[0];
 
-        if (!game && !thumb && !votes) {
-          console.warn("No Roblox data for universeId:", universeId);
-          return;
-        }
+        if (!gameData) throw new Error("No game data");
 
         const img = document.createElement("img");
-        img.src = thumb || "https://via.placeholder.com/512x512.png?text=No+Image";
-        img.alt = (game && game.name) ? game.name : "Game Image";
+        img.src = thumbData?.imageUrl || "https://via.placeholder.com/512x512?text=No+Image";
+        img.alt = gameData.name || "Game Image";
+
+        card.querySelector("h3").textContent = gameData.name || "Unknown Game";
 
         const stats = document.createElement("div");
-
-        const visits = Number(game?.visits ?? game?.visitCount ?? 0);
-        const playing = Number(game?.playing ?? game?.playingCount ?? game?.playerCount ?? 0);
-        const upVotes = Number(votes?.upVotes ?? votes?.upvoteCount ?? 0);
-        const downVotes = Number(votes?.downVotes ?? votes?.downVoteCount ?? votes?.downVotesCount ?? 0);
-
         stats.innerHTML = `
-          <p>👀 ${visits.toLocaleString()} visits</p>
-          <p>🧍 ${playing.toLocaleString()} playing</p>
-          <p>👍 ${upVotes.toLocaleString()} | 👎 ${downVotes.toLocaleString()}</p>
+          <p>👀 ${Number(gameData.visits || 0).toLocaleString()} visits</p>
+          <p>🧍 ${Number(gameData.playing || 0).toLocaleString()} playing</p>
         `;
-
-        // replace existing image if present
-        const existingImg = card.querySelector("img");
-        if (existingImg) existingImg.remove();
 
         card.prepend(img);
         card.appendChild(stats);
       } catch (err) {
-        console.error("Roblox API error:", err);
+        console.warn(`Roblox API failed for ${universeId}:`, err);
+        const fallback = document.createElement("div");
+        fallback.className = "error-msg";
+        fallback.innerHTML = `
+          <p style="color:#ff6666;">⚠ Unable to load game info</p>
+          <button class="retry-btn" onclick="loadGameInfo('${universeId}', this.closest('.game-card'), ${retry + 1})">
+            Retry
+          </button>
+        `;
+        card.appendChild(fallback);
       }
     }
+
     document.querySelectorAll(".game-card").forEach(c => loadGameInfo(c.dataset.id, c));
   </script>
 </body>
