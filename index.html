@@ -1,487 +1,394 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BloxGlobe Studio</title>
-
-  <!-- Optional: load a web font for a modern look -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
   <style>
-    :root{
-      --accent: #00c8ff;
-      --muted: #b0b0b0;
-      --card-bg: rgba(255,255,255,0.04);
-      --glass: rgba(255,255,255,0.03);
-    }
-
-    html,body { height: 100%; }
     body {
       margin: 0;
-      font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background: linear-gradient(180deg, #0b0c10 0%, #11151a 60%);
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(180deg, #0b0c10, #1f2833);
       color: #fff;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
       overflow-x: hidden;
     }
 
-    /* Loading screen */
+    /* --- LOADING SCREEN --- */
     #loading {
-      position: fixed; inset: 0;
-      display: flex; flex-direction: column; gap: 12px;
-      justify-content: center; align-items: center;
-      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.02), transparent 25%), #000;
-      z-index: 4000;
-      transition: opacity .5s ease, visibility .5s;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 3000;
+      animation: fadeOut 2s ease 8s forwards;
     }
-    #loading.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-    #loading img { width: 100px; height: auto; animation: float 2s ease-in-out infinite; }
-    @keyframes float { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-6px) } }
-    #loading h1 { margin: 0; color: var(--accent); font-size: 18px; }
+    #loading img {
+      width: 120px;
+      animation: pumpkin 1.5s infinite ease-in-out;
+    }
+
+    @keyframes pumpkin {
+      0%,100% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.1) rotate(10deg); }
+    }
+
+    #loading h1 {
+      color: orange;
+      font-size: 24px;
+      margin-top: 15px;
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0.6; }
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
 
     header {
-      display: flex; gap: 12px; align-items: center; justify-content: space-between;
-      padding: 12px 28px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      backdrop-filter: blur(8px);
-      position: sticky; top: 0; z-index: 200;
-      border-bottom: 1px solid rgba(255,255,255,0.03);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 50px;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
-    .logo { display:flex; align-items:center; gap:12px; }
-    .logo img { width:44px; height:44px; border-radius:8px; object-fit:cover; }
-    .logo h1 { margin:0; font-size:18px; font-weight:600; }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo img { width: 45px; height: 45px; }
 
-    .nav-links { display:flex; gap:14px; align-items:center; }
-    .nav-links a, .nav-links button {
-      color: #fff; text-decoration:none; background:none; border:none; cursor:pointer;
-      padding:8px 10px; border-radius:8px; font-size:14px;
+    .nav-links { display: flex; align-items: center; gap: 20px; }
+    .nav-links a, button {
+      color: #fff; text-decoration: none; background: none; border: none;
+      cursor: pointer; font-size: 15px; transition: all 0.3s ease;
     }
-    .nav-links a:hover, .nav-links button:hover { color:var(--accent); background:var(--glass); transform:translateY(-1px); }
 
-    main { padding: 28px 48px; max-width:1200px; margin:0 auto; }
+    .nav-links a:hover, button:hover { color: #00c8ff; transform: scale(1.05); }
+
+    #feedbackBtn {
+      display: flex; align-items: center; gap: 6px;
+      color: #b0b0b0; font-weight: 500;
+      background: rgba(255,255,255,0.05);
+      border-radius: 8px; padding: 6px 12px;
+      transition: all 0.3s ease;
+    }
+
+    #feedbackBtn:hover {
+      color: #00c8ff;
+      background: rgba(255,255,255,0.1);
+      transform: scale(1.05);
+    }
 
     #games {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 22px;
-      margin-top: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      padding: 40px 60px;
+      justify-items: center;
     }
 
     .game-card {
-      background: var(--card-bg);
-      border-radius: 14px;
-      padding: 14px;
-      display:flex; flex-direction:column; gap:10px; align-items:center;
-      transition: transform .18s ease, box-shadow .18s ease;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
-    .game-card:hover { transform: translateY(-6px); box-shadow: 0 14px 28px rgba(0,0,0,0.6); }
 
-    .game-card .thumb {
-      width:100%; height:160px; background:#0f1416; border-radius:10px; overflow:hidden;
-      display:flex; align-items:center; justify-content:center;
-    }
-    .game-card .thumb img { width:100%; height:100%; object-fit:cover; display:block; }
-
-    .game-card h3 { margin:4px 0 0 0; font-size:16px; }
-    .game-card p { margin:0; color:var(--muted); font-size:13px; }
+    .game-card:hover { transform: scale(1.03); background: rgba(255,255,255,0.1); }
+    .game-card img { width: 100%; border-radius: 12px; margin-bottom: 10px; }
 
     .play-btn {
-      margin-top:8px; background:var(--accent); color:#fff; border:none;
-      padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:600;
+      margin-top: 10px;
+      background: #00c8ff; color: #fff;
+      padding: 10px 20px; border-radius: 8px; border: none;
+      cursor: pointer; transition: background 0.3s;
     }
-    .play-btn:hover { background:#009edb; }
+
+    .play-btn:hover { background: #008ec4; }
 
     .update-log {
-      background: var(--card-bg);
-      border-radius:12px; padding:16px; margin-top: 26px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 15px;
+      margin: 30px 60px;
+      padding: 20px;
     }
-    .update-log header { display:flex; align-items:center; justify-content:space-between; gap:12px; }
-    .update-log .controls { display:flex; gap:8px; }
-    .small-btn { background:var(--accent); color:#fff; border:none; padding:6px 10px; border-radius:8px; cursor:pointer; }
-    .small-btn.ghost { background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--muted); }
 
-    #logContent { margin-top:12px; min-height:70px; color:var(--muted); }
-    #logContent[contenteditable="true"] { outline: 2px dashed rgba(0,200,255,0.12); color:#fff; }
+    .edit-btn {
+      background: #00c8ff;
+      border: none; color: white;
+      padding: 5px 15px; border-radius: 6px;
+      cursor: pointer; float: right;
+    }
+
+    .edit-btn:hover { background: #009edb; }
 
     .overlay {
-      display: none; position: fixed; inset: 0; z-index: 3000;
-      background: rgba(0,0,0,0.6); backdrop-filter: blur(6px);
-      align-items:center; justify-content:center; gap:12px; color:#fff; flex-direction:column;
+      display: none; position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      justify-content: center; align-items: center; flex-direction: column;
+      color: #fff; font-size: 20px; z-index: 2000;
     }
-    .overlay.visible { display:flex; }
 
     .spinner {
-      border: 5px solid rgba(255,255,255,0.12);
-      border-top: 5px solid var(--accent);
+      border: 5px solid rgba(255,255,255,0.2);
+      border-top: 5px solid #00c8ff;
       border-radius: 50%;
-      width: 48px; height: 48px; animation: spin 1s linear infinite;
+      width: 50px; height: 50px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 10px;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
 
     .feedback-modal {
-      display:none; position:fixed; z-index:3200; left:50%; top:50%; transform:translate(-50%,-50%);
-      width:360px; background: #0b0d0f; padding:16px; border-radius:10px; box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      display: none; position: fixed;
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: rgba(20,20,20,0.95);
+      border-radius: 15px; padding: 25px;
+      z-index: 3000; width: 320px; text-align: center;
     }
-    .feedback-modal.visible { display:block; }
-    .feedback-modal textarea { width:100%; min-height:90px; resize:vertical; padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background:#070809; color:#fff; }
 
-    footer { text-align:center; padding:28px; margin-top:26px; color:var(--muted); font-size:13px; }
-    footer a { color:var(--accent); text-decoration:none; }
+    .feedback-modal textarea {
+      width: 100%; height: 80px;
+      border-radius: 8px; border: none;
+      padding: 8px; resize: none; margin-bottom: 10px;
+    }
+
+    .feedback-modal button {
+      background: #00c8ff; color: #fff;
+      border: none; padding: 8px 15px;
+      border-radius: 8px; cursor: pointer;
+    }
+
+    footer {
+      text-align: center; padding: 25px; margin-top: 50px;
+      background: rgba(0,0,0,0.4); backdrop-filter: blur(6px);
+      font-size: 14px; color: #b0b0b0;
+    }
+    footer a { color: #00c8ff; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
   </style>
 </head>
+
 <body>
   <!-- Loading Screen -->
-  <div id="loading" role="status" aria-live="polite">
-    <img id="loadingImg"
-         src="https://static.vecteezy.com/system/resources/thumbnails/018/867/786/small/halloween-pumpkin-face-free-png.png"
-         alt="decorative pumpkin"
-         onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;128&quot; height=&quot;128&quot;><rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;#0b0d0f&quot;/><text x=&quot;50%&quot; y=&quot;50%&quot; fill=&quot;#888&quot; font-size=&quot;14&quot; font-family=&quot;Poppins,sans-serif&quot; text-anchor=&quot;middle&quot; dy=&quot;.3em&quot;>No Image</text></svg>');">
+  <div id="loading">
+    <img src="https://static.vecteezy.com/system/resources/thumbnails/018/867/786/small/halloween-pumpkin-face-free-png.png" alt="pumpkin">
     <h1>🎃 Happy Halloween from BloxGlobe Studio™</h1>
-    <div style="color:var(--muted);font-size:13px">Loading content…</div>
-    <div id="loadingTimer" style="color:var(--muted);font-size:13px">Loading: 0s</div>
-
-    <script>
-      (function(){
-        const minMs = 10000; // keep loading visible for at least 10 seconds
-        const start = Date.now();
-        const getEl = () => document.getElementById('loading');
-        const timerEl = () => document.getElementById('loadingTimer');
-
-        // update timer text regularly and ensure we don't let it hide before minMs
-        const iv = setInterval(() => {
-          const el = getEl();
-          const tEl = timerEl();
-          if (!el || el.classList.contains('hidden')) {
-            if (Date.now() < start + minMs) {
-              // restore visibility if hidden too early
-              if (el) el.classList.remove('hidden');
-            } else {
-              clearInterval(iv);
-              if (tEl) tEl.textContent = 'Loaded in ' + Math.round((Date.now() - start) / 1000) + 's';
-              setTimeout(() => { const t = timerEl(); if (t && t.parentNode) t.remove(); }, 1200);
-              return;
-            }
-          }
-          if (tEl) tEl.textContent = 'Loading: ' + Math.round((Date.now() - start) / 1000) + 's';
-        }, 250);
-
-        // keep a clone ready to reinsert in case script removes the element early
-        const original = getEl().cloneNode(true);
-
-        const obs = new MutationObserver(() => {
-          const el = getEl();
-          if (!el && Date.now() < start + minMs) {
-            // reinsert a clone if removed before minimum time
-            document.body.appendChild(original.cloneNode(true));
-          } else if (el && el.classList.contains('hidden') && Date.now() < start + minMs) {
-            // remove hidden class if applied too early
-            el.classList.remove('hidden');
-          } else if (Date.now() >= start + minMs) {
-            obs.disconnect();
-          }
-        });
-
-        obs.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
-      })();
-    </script>
   </div>
 
   <header>
-    <div class="logo" role="banner">
-      <img src="YOUR_ROBLOX_LOGO.png" alt="Studio logo">
-      <h1>BloxGlobe Studio</h1>
+    <div class="logo">
+      <img src="YOUR_ROBLOX_LOGO.png" alt="Roblox Logo" />
+      <h2>BloxGlobe Studio</h2>
     </div>
-
-    <nav class="nav-links" aria-label="Main navigation">
-      <a href="https://www.roblox.com/users/5525937576/profile" target="_blank" rel="noopener">Roblox Profile</a>
-      <a href="https://whatsapp.com/channel/0029VaAfKWq7BLtUakspqi1R" target="_blank" rel="noopener">Follow Channel</a>
-      <button id="feedbackBtn" aria-haspopup="dialog">💬 Feedback</button>
-    </nav>
+    <div class="nav-links">
+      <a href="https://www.roblox.com/users/5525937576/profile">View Roblox Profile</a>
+      <a href="https://whatsapp.com/channel/0029VaAfKWq7BLtUakspqi1R">Follow Channel</a>
+      <button id="feedbackBtn">💬 Feedback</button>
+    </div>
   </header>
 
-  <main>
-    <section id="games" aria-labelledby="gamesTitle">
-      <h2 id="gamesTitle" style="grid-column:1/-1; margin:0 0 8px 0; font-size:18px;">Featured Games</h2>
+  <section id="games">
+    <div class="game-card" data-id="135869717619701">
+      <h3>ReadyNode [Beta]</h3>
+      <p>Explore the early build of ReadyNode!</p>
+      <a class="play-btn" href="https://www.roblox.com/games/135869717619701/Beta" target="_blank" rel="noopener noreferrer" aria-label="Play ReadyNode (opens in new tab)">Play</a>
+    </div>
 
-      <article class="game-card" data-id="135869717619701" aria-labelledby="gn1">
-        <div class="thumb" aria-hidden="true"><img src="" alt=""></div>
-        <h3 id="gn1">ReadyNode [Beta]</h3>
-        <p>Explore the early build of ReadyNode!</p>
-        <button class="play-btn" onclick="window.open('https://www.roblox.com/games/135869717619701/Beta','_blank')">Play</button>
-      </article>
+    <div class="game-card" data-id="85250100428738">
+      <h3>R25</h3>
+      <p>R25 is your new way to play and build!</p>
+      <a class="play-btn" href="https://www.roblox.com/games/85250100428738/R25" target="_blank" rel="noopener noreferrer" aria-label="Play R25 (opens in new tab)">Play</a>
+    </div>
+  </section>
 
-      <article class="game-card" data-id="85250100428738" aria-labelledby="gn2">
-        <div class="thumb" aria-hidden="true"><img src="" alt=""></div>
-        <h3 id="gn2">R25</h3>
-        <p>R25 is your new way to play and build!</p>
-        <button class="play-btn" onclick="window.open('https://www.roblox.com/games/85250100428738/R25','_blank')">Play</button>
-      </article>
-    </section>
+  <section class="update-log">
+    <h3>Update Log</h3>
+    <div style="float: right;">
+      <button class="edit-btn" id="editBtn" aria-label="Enable edit">Edit</button>
+      <button class="edit-btn" id="saveBtn" style="display: none;" aria-label="Save changes">Save</button>
+      <button class="edit-btn" id="cancelBtn" style="display: none;" aria-label="Cancel editing">Cancel</button>
+    </div>
+    <div id="logContent" contenteditable="false" aria-live="polite">
+      <p>🔥 Update 1.5.4 - Fixed UI stretching & layout issues.</p>
+      <p>💬 Added Feedback system for reports & feature requests.</p>
+      <p>🧠 Improved performance and design polish.</p>
+    </div>
+  </section>
 
-    <section class="update-log" aria-labelledby="logTitle">
-      <header>
-        <h2 id="logTitle" style="margin:0;font-size:16px;">Update Log</h2>
-        <div class="controls">
-          <button class="small-btn ghost" id="saveLogBtn" title="Save update log">Save</button>
-          <button class="small-btn" id="editLogBtn" title="Edit update log">Edit</button>
-        </div>
-      </header>
-
-      <div id="logContent" contenteditable="false" aria-live="polite">
-        <p>🔥 Update 1.5.4 - Fixed UI stretching & layout issues.</p>
-        <p>💬 Added Feedback system for reports & feature requests.</p>
-        <p>🧠 Improved performance and design polish.</p>
-      </div>
-    </section>
-  </main>
-
-  <div class="overlay" id="updateOverlay" role="status" aria-hidden="true">
-    <div class="spinner" aria-hidden="true"></div>
-    <p id="updateOverlayText">Updating website...</p>
+  <div class="overlay" id="updateOverlay">
+    <div class="spinner"></div>
+    <p>Updating website...</p>
   </div>
 
-  <div class="feedback-modal" id="feedbackModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="feedbackTitle">
-    <h3 id="feedbackTitle" style="margin-top:0">Send Feedback</h3>
-    <textarea id="feedbackText" placeholder="Describe the issue..." aria-label="Feedback text"></textarea>
-    <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:8px;">
-      <button class="small-btn" id="sendFeedbackBtn">Send Report</button>
-      <button class="small-btn ghosok</div>t" id="closeF eedbackBtn">Close</button>
+  <div class="feedback-modal" id="feedbackModal">
+    <h3>Send Feedback</h3>
+    <textarea id="feedbackText" placeholder="Describe the issue..."></textarea>
+    <div>
+      <button onclick="sendFeedback()">Send Report</button>
+      <button onclick="closeFeedback()">Close</button>
     </div>
   </div>
 
   <footer>
-    Founder & Developer: <a href="#">Abel</a><br />
-    © 2025 BloxGlobe Studio™. All rights reserved.
-  </footer>
-
   <script>
-    // Utility: safe text encode for URL
-    co</section>nst encode = (s) => encodeURIComponent(String(s || ''));
+    // Admin Edit Protection & Edit workflow
+    const ADMIN_PHRASE = "SpotifyLover.To";
+    const logEl = document.getElementById("logContent");
+    const editBtn = document.getElementById("editBtn");
+    const saveBtn = document.getElementById("saveBtn");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const LOG_KEY = "bloxglobe_update_log_html";
 
-    // Hide loading after window load or timeout
-    const loadingEl = document.getElementById('loading');
-    function hideLoading() {
-      loadingEl.classList.add('hidden');
-      setTimeout(() => loadingEl.remove(), 700);
+    function enableEdit() {
+      const phrase = prompt("Enter Admin Phrase:");
+      if (phrase === ADMIN_PHRASE) {
+        logEl.contentEditable = "true";
+        logEl.focus();
+        toggleEditControls(true);
+        alert("Edit mode enabled. Remember to save changes!");
+      } else {
+        alert("Access denied.");
+      }
     }
-    window.addEventListener('load', hideLoading);
-    // fallback in case load event takes long
-    setTimeout(() => { if (document.body.contains(loadingEl)) hideLoading(); }, 5000);
 
-    // Update overlay handling (version check)
-    (async function checkVersion() {
-      try {
-        const r = await fetch('version.json?' + Date.now(), { cache: 'no-store' });
-        if (!r.ok) return;
-        const d = await r.json();
-        const vLocal = localStorage.getItem('bloxglobeVersion') || '1.5.2';
-        if (d.version && d.version !== vLocal) {
-          const overlay = document.getElementById('updateOverlay');
-          overlay.classList.add('visible');
-          overlay.setAttribute('aria-hidden','false');
+    function saveEdit() {
+      logEl.contentEditable = "false";
+      toggleEditControls(false);
+      localStorage.setItem(LOG_KEY, logEl.innerHTML);
+      alert("Update log saved locally.");
+    }
+
+    function cancelEdit() {
+      // revert content from storage (or initial content if none)
+      const saved = localStorage.getItem(LOG_KEY);
+      if (saved !== null) logEl.innerHTML = saved;
+      logEl.contentEditable = "false";
+      toggleEditControls(false);
+    }
+
+    function toggleEditControls(editing) {
+      editBtn.style.display = editing ? "none" : "inline-block";
+      saveBtn.style.display = editing ? "inline-block" : "none";
+      cancelBtn.style.display = editing ? "inline-block" : "none";
+    }
+
+    // wire up buttons and load stored log on page load
+    document.addEventListener("DOMContentLoaded", () => {
+      // load saved log if present
+      const saved = localStorage.getItem(LOG_KEY);
+      if (saved !== null) logEl.innerHTML = saved;
+
+      editBtn.addEventListener("click", enableEdit);
+      saveBtn.addEventListener("click", saveEdit);
+      cancelBtn.addEventListener("click", cancelEdit);
+    });
+
+    // Feedback Modal
+    const modal = document.getElementById("feedbackModal");
+    document.getElementById("feedbackBtn").onclick = () =>
+      (modal.style.display = "block");
+
+    function closeFeedback() { modal.style.display = "none"; }
+
+    function sendFeedback() {
+      const text = document.getElementById("feedbackText").value;
+      if (!text.trim()) return alert("Please describe your issue!");
+      const githubURL = `https://github.com/BloxGlobe/BloxGlobe-Studio--Website/issues/new?title=Feedback&body=${encodeURIComponent(text)}`;
+      window.open(githubURL, "_blank");
+      closeFeedback();
+    }
+
+    // Update Overlay 20s
+    fetch("version.json?" + Date.now())
+      .then(r => r.json())
+      .then(d => {
+        const v = localStorage.getItem("bloxglobeVersion") || "1.5.2";
+        if (d.version !== v) {
+          const o = document.getElementById("updateOverlay");
+          o.style.display = "flex";
           setTimeout(() => {
-            overlay.classList.remove('visible');
-            overlay.setAttribute('aria-hidden','true');
-            localStorage.setItem('bloxglobeVersion', d.version);
+            o.style.display = "none";
+            localStorage.setItem("bloxglobeVersion", d.version);
           }, 20000);
         }
-      } catch (err) {
-        console.debug('Version check failed:', err);
-      }
-    })();
+      }).catch(() => {});
 
-    // Feedback modal
-    const feedbackModal = document.getElementById('feedbackModal');
-    const feedbackBtn = document.getElementById('feedbackBtn');
-    const closeFeedbackBtn = document.getElementById('closeFeedbackBtn');
-    const sendFeedbackBtn = document.getElementById('sendFeedbackBtn');
-
-    function openFeedback() {
-      feedbackModal.classList.add('visible');
-      feedbackModal.setAttribute('aria-hidden','false');
-      document.getElementById('feedbackText').focus();
-    }
-    function closeFeedback() {
-      feedbackModal.classList.remove('visible');
-      feedbackModal.setAttribute('aria-hidden','true');
-    }
-
-    feedbackBtn.addEventListener('click', openFeedback);
-    closeFeedbackBtn.addEventListener('click', closeFeedback);
-
-    sendFeedbackBtn.addEventListener('click', () => {
-      const text = document.getElementById('feedbackText').value;
-      if (!text.trim()) return alert('Please describe your issue!');
-      const githubURL = `https://github.com/BloxGlobe/BloxGlobe-Studio--Website/issues/new?title=${encode('Feedback')}&body=${encode(text)}`;
-      window.open(githubURL, '_blank', 'noopener');
-      closeFeedback();
-    });
-
-    // Update Log editing + save to localStorage
-    const editBtn = document.getElementById('editLogBtn');
-    const saveBtn = document.getElementById('saveLogBtn');
-    const logContent = document.getElementById('logContent');
-
-    editBtn.addEventListener('click', () => {
-      const isEditing = logContent.getAttribute('contenteditable') === 'true';
-      logContent.setAttribute('contenteditable', isEditing ? 'false' : 'true');
-      if (!isEditing) {
-        logContent.focus();
-        editBtn.textContent = 'Stop';
-      } else {
-        editBtn.textContent = 'Edit';
-      }
-    });
-
-    saveBtn.addEventListener('click', () => {
-      logContent.setAttribute('contenteditable','false');
-      editBtn.textContent = 'Edit';
-      localStorage.setItem('bloxglobeLog', logContent.innerHTML);
-      alert('Update log saved locally.');
-    });
-
-    // Load saved log if exists
-    const savedLog = localStorage.getItem('bloxglobeLog');
-    if (savedLog) logContent.innerHTML = savedLog;
-
-    // Roblox API integration with fallbacks and safe guards
-    async function loadGameInfo(universeId, card) {
-      const thumbEl = card.querySelector('.thumb img');
-      const statsEl = document.createElement('div');
-      statsEl.style.width = '100%';
-      statsEl.style.textAlign = 'left';
-      statsEl.style.fontSize = '13px';
-      statsEl.style.color = 'var(--muted)';
-
-      // default placeholders
-      thumbEl.src = '';
-      thumbEl.alt = 'Game thumbnail';
-      statsEl.innerHTML = '<p style="margin:0;color:var(--muted)">Loading info…</p>';
-      card.appendChild(statsEl);
-
+    // Roblox API Integration
+    async function fetchJson(url) {
       try {
-        const gameInfoUrl = `https://games.roblox.com/v1/games?universeIds=${encodeURIComponent(universeId)}`;
-        const thumbUrl = `https://thumbnails.roblox.com/v1/games/icons?universeIds=${encodeURIComponent(universeId)}&size=512x512&format=Png`;
-        const votesUrl = `https://games.roblox.com/v1/games/votes?universeIds=${encodeURIComponent(universeId)}`;
+        const res = await fetch(url);
+        if (!res.ok) {
+          console.warn("Request failed:", url, res.status);
+          return null;
+        }
+        return await res.json();
+      } catch (e) {
+        console.warn("Fetch error:", url, e);
+        return null;
+      }
+    }
 
-        const [giRes, thRes, voRes] = await Promise.allSettled([
-          fetch(gameInfoUrl),
-          fetch(thumbUrl),
-          fetch(votesUrl)
+    async function loadGameInfo(universeId, card) {
+      try {
+        const [gameInfoJson, thumbJson, votesJson] = await Promise.all([
+          fetchJson(`https://games.roblox.com/v1/games?universeIds=${universeId}`),
+          fetchJson(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=512x512&format=Png`),
+          fetchJson(`https://games.roblox.com/v1/games/votes?universeIds=${universeId}`)
         ]);
 
-        let game = null, thumb = null, votes = null;
+        const game = gameInfoJson?.data?.[0];
+        const thumb = thumbJson?.data?.[0]?.imageUrl || "";
+        const votes = votesJson?.data?.[0] || {};
 
-        if (giRes.status === 'fulfilled' && giRes.value.ok) {
-          const j = await giRes.value.json();
-          game = j.data && j.data[0] ? j.data[0] : null;
+        if (!game) {
+          card.querySelector("h3")?.insertAdjacentHTML("afterend", '<p style="color:#f88;">Unable to load game info</p>');
+          return;
         }
 
-        if (thRes.status === 'fulfilled' && thRes.value.ok) {
-          const j = await thRes.value.json();
-          thumb = j.data && j.data[0] ? j.data[0].imageUrl : null;
-        }
+        const img = document.createElement("img");
+        img.src = thumb || "https://via.placeholder.com/512x256?text=No+Image";
+        img.alt = game.name || "Game image";
 
-        if (voRes.status === 'fulfilled' && voRes.value.ok) {
-          const j = await voRes.value.json();
-          votes = j.data && j.data[0] ? j.data[0] : null;
-        }
+        const stats = document.createElement("div");
+        const visits = Number(game.visits || 0).toLocaleString();
+        const playing = Number(game.playing || 0).toLocaleString();
+        const up = Number(votes.upVotes || 0).toLocaleString();
+        const down = Number(votes.downVotes || 0).toLocaleString();
 
-        // Fallbacks
-        if (!thumb) {
-          thumb = 'data:image/svg+xml;utf8,' +
-            encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512"><rect width="100%" height="100%" fill="#0b0d0f"/><text x="50%" y="50%" fill="#888" font-size="28" font-family="Poppins,sans-serif" text-anchor="middle" dy=".3em">No Image</text></svg>');
-        }
-        thumbEl.src = thumb;
-        thumbEl.alt = game && game.name ? game.name : 'Game thumbnail';
-        // Build stats safely
-        const visits = game && typeof game.visits === 'number' ? game.visits.toLocaleString() : 'N/A';
-        const playing = game && typeof game.playing === 'number' ? game.playing.toLocaleString() : 'N/A';
-        const up = votes && typeof votes.upVotes === 'number' ? votes.upVotes.toLocaleString() : 'N/A';
-        const down = votes && typeof votes.downVotes === 'number' ? votes.downVotes.toLocaleString() : 'N/A';
-
-        statsEl.innerHTML = `
-          <p style="margin:6px 0 4px 0;"><strong>${game && game.name ? escapeHtml(game.name) : 'Untitled'}</strong></p>
-          <p style="margin:0">👀 ${visits} visits · 🧍 ${playing} playing</p>
-          <p style="margin:6px 0 0 0">👍 ${up} · 👎 ${down}</p>
+        stats.innerHTML = `
+          <p>👀 ${visits} visits</p>
+          <p>🧍 ${playing} playing</p>
+          <p>👍 ${up} | 👎 ${down}</p>
         `;
+        card.prepend(img);
+        card.appendChild(stats);
       } catch (err) {
-        console.error('Roblox API error:', err);
-        statsEl.innerHTML = '<p style="margin:0;color:var(--muted)">Failed to load game info.</p>';
+        console.error("Roblox API error:", err);
+        card.querySelector("h3")?.insertAdjacentHTML("afterend", '<p style="color:#f88;">Error loading game info</p>');
       }
     }
-
-    // basic escape for inserted plain text
-    function escapeHtml(s) {
-      return (s+'').replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]; });
+    document.querySelectorAll(".game-card").forEach(c => loadGameInfo(c.dataset.id, c));
+  </script>
+      }
     }
-
-    // initialize cards
-    document.querySelectorAll('.game-card').forEach(card => {
-      const id = card.dataset.id;
-      if (!id) return;
-      loadGameInfo(id, card);
-    });
-
-    // Accessibility: close feedback on Escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        if (feedbackModal.classList.contains('visible')) closeFeedback();
-      }
-        });
-
-        // Roblox status check (uses status.roblox.com API; does not scrape the history section)
-        async function checkRobloxStatus() {
-      try {
-        const res = await fetch('https://status.roblox.com/api/v2/status.json', { cache: 'no-store' });
-        if (!res.ok) return;
-        const data = await res.json();
-        const indicator = data && data.status && data.status.indicator ? data.status.indicator : 'none';
-        const desc = data && data.status && data.status.description ? data.status.description : '';
-
-        // create banner if missing
-        let banner = document.getElementById('robloxStatusBanner');
-        if (!banner) {
-          banner = document.createElement('div');
-          banner.id = 'robloxStatusBanner';
-          banner.setAttribute('role', 'status');
-          banner.style.cssText = [
-        'display:none',
-        'padding:8px 16px',
-        'text-align:center',
-        'font-size:13px',
-        'border-bottom:1px solid rgba(255,255,255,0.03)',
-        'z-index:210'
-          ].join(';');
-          const header = document.querySelector('header');
-          if (header && header.parentNode) header.parentNode.insertBefore(banner, header.nextSibling);
-          else document.body.insertBefore(banner, document.body.firstChild);
-        }
-
-        if (indicator !== 'none') {
-          banner.textContent = `Roblox status: ${desc || indicator}. Some services may be affected.`;
-          banner.style.background = 'linear-gradient(90deg, rgba(255,60,60,0.08), rgba(255,60,60,0.04))';
-          banner.style.color = '#ffd6d6';
-          banner.style.display = 'block';
-          banner.setAttribute('aria-hidden', 'false');
-        } else {
-          banner.style.display = 'none';
-          banner.setAttribute('aria-hidden', 'true');
-        }
-      } catch (err) {
-        console.debug('Roblox status check failed:', err);
-      }
-        }
-
-        // initial check + periodic polling (every 60s)
-        checkRobloxStatus();
-        setInterval(checkRobloxStatus, 60000);
-    });
+    document.querySelectorAll(".game-card").forEach(c => loadGameInfo(c.dataset.id, c));
   </script>
 </body>
 </html>
