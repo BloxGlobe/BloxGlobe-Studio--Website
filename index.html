@@ -137,9 +137,58 @@
 <body>
   <!-- Loading Screen -->
   <div id="loading" role="status" aria-live="polite">
-    <img src="https://static.vecteezy.com/system/resources/thumbnails/018/867/786/small/halloween-pumpkin-face-free-png.png" alt="decorative pumpkin">
+    <img id="loadingImg"
+         src="https://static.vecteezy.com/system/resources/thumbnails/018/867/786/small/halloween-pumpkin-face-free-png.png"
+         alt="decorative pumpkin"
+         onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;128&quot; height=&quot;128&quot;><rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;#0b0d0f&quot;/><text x=&quot;50%&quot; y=&quot;50%&quot; fill=&quot;#888&quot; font-size=&quot;14&quot; font-family=&quot;Poppins,sans-serif&quot; text-anchor=&quot;middle&quot; dy=&quot;.3em&quot;>No Image</text></svg>');">
     <h1>🎃 Happy Halloween from BloxGlobe Studio™</h1>
     <div style="color:var(--muted);font-size:13px">Loading content…</div>
+    <div id="loadingTimer" style="color:var(--muted);font-size:13px">Loading: 0s</div>
+
+    <script>
+      (function(){
+        const minMs = 10000; // keep loading visible for at least 10 seconds
+        const start = Date.now();
+        const getEl = () => document.getElementById('loading');
+        const timerEl = () => document.getElementById('loadingTimer');
+
+        // update timer text regularly and ensure we don't let it hide before minMs
+        const iv = setInterval(() => {
+          const el = getEl();
+          const tEl = timerEl();
+          if (!el || el.classList.contains('hidden')) {
+            if (Date.now() < start + minMs) {
+              // restore visibility if hidden too early
+              if (el) el.classList.remove('hidden');
+            } else {
+              clearInterval(iv);
+              if (tEl) tEl.textContent = 'Loaded in ' + Math.round((Date.now() - start) / 1000) + 's';
+              setTimeout(() => { const t = timerEl(); if (t && t.parentNode) t.remove(); }, 1200);
+              return;
+            }
+          }
+          if (tEl) tEl.textContent = 'Loading: ' + Math.round((Date.now() - start) / 1000) + 's';
+        }, 250);
+
+        // keep a clone ready to reinsert in case script removes the element early
+        const original = getEl().cloneNode(true);
+
+        const obs = new MutationObserver(() => {
+          const el = getEl();
+          if (!el && Date.now() < start + minMs) {
+            // reinsert a clone if removed before minimum time
+            document.body.appendChild(original.cloneNode(true));
+          } else if (el && el.classList.contains('hidden') && Date.now() < start + minMs) {
+            // remove hidden class if applied too early
+            el.classList.remove('hidden');
+          } else if (Date.now() >= start + minMs) {
+            obs.disconnect();
+          }
+        });
+
+        obs.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+      })();
+    </script>
   </div>
 
   <header>
@@ -384,6 +433,54 @@
       if (e.key === 'Escape') {
         if (feedbackModal.classList.contains('visible')) closeFeedback();
       }
+        });
+
+        // Roblox status check (uses status.roblox.com API; does not scrape the history section)
+        async function checkRobloxStatus() {
+      try {
+        const res = await fetch('https://status.roblox.com/api/v2/status.json', { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        const indicator = data && data.status && data.status.indicator ? data.status.indicator : 'none';
+        const desc = data && data.status && data.status.description ? data.status.description : '';
+
+        // create banner if missing
+        let banner = document.getElementById('robloxStatusBanner');
+        if (!banner) {
+          banner = document.createElement('div');
+          banner.id = 'robloxStatusBanner';
+          banner.setAttribute('role', 'status');
+          banner.style.cssText = [
+        'display:none',
+        'padding:8px 16px',
+        'text-align:center',
+        'font-size:13px',
+        'border-bottom:1px solid rgba(255,255,255,0.03)',
+        'z-index:210'
+          ].join(';');
+          const header = document.querySelector('header');
+          if (header && header.parentNode) header.parentNode.insertBefore(banner, header.nextSibling);
+          else document.body.insertBefore(banner, document.body.firstChild);
+        }
+
+        if (indicator !== 'none') {
+          banner.textContent = `Roblox status: ${desc || indicator}. Some services may be affected.`;
+          banner.style.background = 'linear-gradient(90deg, rgba(255,60,60,0.08), rgba(255,60,60,0.04))';
+          banner.style.color = '#ffd6d6';
+          banner.style.display = 'block';
+          banner.setAttribute('aria-hidden', 'false');
+        } else {
+          banner.style.display = 'none';
+          banner.setAttribute('aria-hidden', 'true');
+        }
+      } catch (err) {
+        console.debug('Roblox status check failed:', err);
+      }
+        }
+
+        // initial check + periodic polling (every 60s)
+        checkRobloxStatus();
+        setInterval(checkRobloxStatus, 60000);
     });
   </script>
 </body>
