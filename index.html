@@ -13,45 +13,6 @@
       overflow-x: hidden;
     }
 
-    /* --- LOADING SCREEN --- */
-    #loading {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      z-index: 3000;
-      animation: fadeOut 2s ease 8s forwards;
-    }
-
-    #loading img {
-      width: 130px;
-      animation: pumpkin 1.5s infinite ease-in-out;
-    }
-
-    @keyframes pumpkin {
-      0%,100% { transform: scale(1) rotate(0deg); }
-      50% { transform: scale(1.1) rotate(10deg); }
-    }
-
-    #loading h1 {
-      color: orange;
-      font-size: 26px;
-      margin-top: 15px;
-      animation: blink 2s infinite;
-    }
-
-    @keyframes blink {
-      50% { opacity: 0.6; }
-    }
-
-    @keyframes fadeOut {
-      to { opacity: 0; visibility: hidden; }
-    }
-
     header {
       display: flex;
       justify-content: space-between;
@@ -64,17 +25,41 @@
       z-index: 100;
     }
 
-    .logo { display: flex; align-items: center; gap: 10px; }
-    .logo img { width: 45px; height: 45px; }
-
-    .nav-links { display: flex; align-items: center; gap: 20px; }
-    .nav-links a, button {
-      color: #fff; text-decoration: none; background: none; border: none;
-      cursor: pointer; font-size: 15px; transition: all 0.3s ease;
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .nav-links a:hover, button:hover { color: #00c8ff; transform: scale(1.05); }
+    .logo img {
+      width: 45px;
+      height: 45px;
+    }
 
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-links a,
+    button {
+      color: #fff;
+      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links a:hover,
+    button:hover {
+      color: #00c8ff;
+      transform: scale(1.05);
+    }
+
+    /* GAME CARDS GRID */
     #games {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -84,7 +69,7 @@
     }
 
     .game-card {
-      background: rgba(255,255,255,0.05);
+      background: rgba(255, 255, 255, 0.05);
       border-radius: 20px;
       padding: 20px;
       text-align: center;
@@ -92,55 +77,102 @@
       width: 100%;
       max-width: 400px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-      position: relative;
     }
 
-    .game-card:hover { transform: scale(1.03); background: rgba(255,255,255,0.1); }
-    .game-card img { width: 100%; border-radius: 12px; margin-bottom: 10px; }
+    .game-card:hover {
+      transform: scale(1.03);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .game-card img {
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+
+    .stats {
+      text-align: center;
+      font-size: 14px;
+      color: #ccc;
+    }
 
     .play-btn {
       margin-top: 10px;
-      background: #00c8ff; color: #fff;
-      padding: 10px 20px; border-radius: 8px; border: none;
-      cursor: pointer; transition: background 0.3s;
-    }
-
-    .play-btn:hover { background: #008ec4; }
-
-    .retry-btn {
-      background: #ff5252;
+      background: #00c8ff;
       color: #fff;
-      border: none;
-      padding: 6px 14px;
+      padding: 10px 20px;
       border-radius: 8px;
+      border: none;
       cursor: pointer;
-      font-size: 13px;
-      transition: background 0.3s ease;
+      transition: background 0.3s;
     }
-    .retry-btn:hover { background: #ff7373; }
 
-    .update-log {
-      background: rgba(255,255,255,0.05);
-      border-radius: 15px;
-      margin: 30px 60px;
-      padding: 20px;
+    .play-btn:hover {
+      background: #008ec4;
+    }
+
+    /* LOADING SCREEN */
+    #loadingScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, #0b0c10, #1f2833);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      color: #fff;
+      font-size: 22px;
+      animation: fadeOut 1s ease forwards;
+      animation-delay: 9s;
+    }
+
+    #pumpkin {
+      font-size: 80px;
+      animation: bounce 1.5s infinite alternate;
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-20px); }
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        visibility: hidden;
+      }
     }
 
     footer {
-      text-align: center; padding: 25px; margin-top: 50px;
-      background: rgba(0,0,0,0.4); backdrop-filter: blur(6px);
-      font-size: 14px; color: #b0b0b0;
+      text-align: center;
+      padding: 25px;
+      margin-top: 50px;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(6px);
+      font-size: 14px;
+      color: #b0b0b0;
     }
-    footer a { color: #00c8ff; text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
+
+    footer a {
+      color: #00c8ff;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
-
 <body>
-  <!-- Loading Screen -->
-  <div id="loading">
-    <img src="https://static.vecteezy.com/system/resources/thumbnails/018/867/786/small/halloween-pumpkin-face-free-png.png" alt="pumpkin">
-    <h1>🎃 Happy Halloween from BloxGlobe Studio™</h1>
+
+  <!-- 🎃 HALLOWEEN LOADING SCREEN -->
+  <div id="loadingScreen">
+    <div id="pumpkin">🎃</div>
+    <h2>Happy Halloween!</h2>
   </div>
 
   <header>
@@ -149,86 +181,89 @@
       <h2>BloxGlobe Studio</h2>
     </div>
     <div class="nav-links">
-      <a href="https://www.roblox.com/users/5525937576/profile">View Roblox Profile</a>
+      <a href="https://www.roblox.com/users/5525937576/profile">View Profile</a>
       <a href="https://whatsapp.com/channel/0029VaAfKWq7BLtUakspqi1R">Follow Channel</a>
     </div>
   </header>
 
+  <!-- Games Section -->
   <section id="games">
     <div class="game-card" data-id="135869717619701">
       <h3>ReadyNode [Beta]</h3>
       <p>Explore the early build of ReadyNode!</p>
-      <button class="play-btn" onclick="window.open('https://www.roblox.com/games/135869717619701/Beta', '_blank')">Play</button>
+      <button class="play-btn">Play</button>
     </div>
 
     <div class="game-card" data-id="85250100428738">
       <h3>R25</h3>
       <p>R25 is your new way to play and build!</p>
-      <button class="play-btn" onclick="window.open('https://www.roblox.com/games/85250100428738/R25', '_blank')">Play</button>
-    </div>
-  </section>
-
-  <section class="update-log">
-    <h3>Update Log</h3>
-    <div id="logContent">
-      <p>🔥 Update 1.5.5 - Added safe fallbacks and improved API handling.</p>
-      <p>🎃 Added Halloween pumpkin animation.</p>
-      <p>🧠 Improved error safety and design polish.</p>
+      <button class="play-btn">Play</button>
     </div>
   </section>
 
   <footer>
-    Founder & Developer: <a href="#">Abel</a>
-    <p>&copy; 2025 BloxGlobe Studio&trade;. All rights reserved.</p>
+    Founder & Developer: <a href="#">Abel</a><br />
+    © 2025 BloxGlobe Studio™. All rights reserved.
   </footer>
 
   <script>
-    async function loadGameInfo(universeId, card, retry = 0) {
-      const errorMsg = card.querySelector(".error-msg");
-      if (errorMsg) errorMsg.remove();
+    // --- Remove Loading After 10s ---
+    setTimeout(() => {
+      document.getElementById("loadingScreen").style.display = "none";
+    }, 10000);
 
+    // --- Roblox API Integration (Synced + Safe) ---
+    async function loadGameInfo(universeId, card) {
       try {
-        const [gameRes, thumbRes] = await Promise.all([
+        const [infoRes, votesRes, iconRes] = await Promise.all([
           fetch(`https://games.roblox.com/v1/games?universeIds=${universeId}`),
+          fetch(`https://games.roblox.com/v1/games/votes?universeIds=${universeId}`),
           fetch(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=512x512&format=Png`)
         ]);
 
-        if (!gameRes.ok || !thumbRes.ok) throw new Error("Bad response");
+        if (!infoRes.ok || !votesRes.ok || !iconRes.ok)
+          throw new Error("API request failed");
 
-        const gameData = (await gameRes.json())?.data?.[0];
-        const thumbData = (await thumbRes.json())?.data?.[0];
+        const [infoData, votesData, iconData] = await Promise.all([
+          infoRes.json(), votesRes.json(), iconRes.json()
+        ]);
 
-        if (!gameData) throw new Error("No game data");
+        const game = infoData.data[0];
+        const votes = votesData.data[0];
+        const thumb = iconData.data[0]?.imageUrl;
 
+        // Thumbnail
         const img = document.createElement("img");
-        img.src = thumbData?.imageUrl || "https://via.placeholder.com/512x512?text=No+Image";
-        img.alt = gameData.name || "Game Image";
+        img.src = thumb || "https://tr.rbxcdn.com/3e1b69e2b2a0c9b2c9a8d8b94f4a9a6f/420/420/Image/Png";
+        img.alt = game.name;
 
-        card.querySelector("h3").textContent = gameData.name || "Unknown Game";
-
+        // Stats
         const stats = document.createElement("div");
+        stats.className = "stats";
         stats.innerHTML = `
-          <p>👀 ${Number(gameData.visits || 0).toLocaleString()} visits</p>
-          <p>🧍 ${Number(gameData.playing || 0).toLocaleString()} playing</p>
+          <p>👀 ${game.visits.toLocaleString()} visits</p>
+          <p>🧍 ${game.playing.toLocaleString()} playing now</p>
+          <p>👍 ${votes.upVotes.toLocaleString()} | 👎 ${votes.downVotes.toLocaleString()}</p>
+          <p>🕒 Updated: ${new Date(game.updated).toLocaleDateString()}</p>
         `;
 
         card.prepend(img);
         card.appendChild(stats);
+
+        // Play button
+        card.querySelector(".play-btn").onclick = () => {
+          window.open(`https://www.roblox.com/games/${universeId}`, "_blank");
+        };
+
       } catch (err) {
-        console.warn(`Roblox API failed for ${universeId}:`, err);
-        const fallback = document.createElement("div");
-        fallback.className = "error-msg";
-        fallback.innerHTML = `
-          <p style="color:#ff6666;">⚠ Unable to load game info</p>
-          <button class="retry-btn" onclick="loadGameInfo('${universeId}', this.closest('.game-card'), ${retry + 1})">
-            Retry
-          </button>
-        `;
-        card.appendChild(fallback);
+        console.error("Failed to load Roblox API data:", err);
+        card.innerHTML += `<p style="color: #ff6666;">⚠️ Failed to load game info.</p>`;
       }
     }
 
-    document.querySelectorAll(".game-card").forEach(c => loadGameInfo(c.dataset.id, c));
+    document.querySelectorAll(".game-card").forEach(card => {
+      loadGameInfo(card.dataset.id, card);
+    });
   </script>
 </body>
 </html>
